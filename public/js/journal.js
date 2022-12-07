@@ -1,5 +1,9 @@
-date = new Date()
+let rating = document.querySelectorAll('#icon')
 
-currentDate = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`
+Array.from(rating).forEach( (el) => {
+    el.addEventListener('click', getRating)
+})
 
-console.log(currentDate)
+function getRating() {
+    console.log('yes')
+}
