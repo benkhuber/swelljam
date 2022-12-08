@@ -1,3 +1,5 @@
+const Journal = require('../models/Journal')
+
 module.exports = {
     getIndex: (req,res) => {
         try {
@@ -12,6 +14,15 @@ module.exports = {
             res.render('journal.ejs', {currentDate : currentDate})
         } catch(err) {
         console.log(err)
+        }
+    },
+    addSession: async (req,res) => {
+        try {
+            await Journal.create({date: req.body.sessionDate, spot: req.body.sessionSpot, rating: req.body.sessionRating})
+            console.log('session added')
+            res.redirect('/journal')
+        } catch(err) {
+            console.log(err)
         }
     }
 }

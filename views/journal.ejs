@@ -15,43 +15,21 @@
 
     <h1>JOURNAL</h1>
 
-    <form>
-        Date: <input type="date" value="<%= currentDate %>">
-        Spot: <input type="text">
-        Rating: <div class="rating">
-            <label>
-              <input type="radio" name="stars" value="1" />
-              <span class="icon">★</span>
-            </label>
-            <label>
-              <input type="radio" name="stars" value="2" />
-              <span class="icon">★</span>
-              <span class="icon">★</span>
-            </label>
-            <label>
-              <input type="radio" name="stars" value="3" />
-              <span class="icon">★</span>
-              <span class="icon">★</span>
-              <span class="icon">★</span>   
-            </label>
-            <label>
-              <input type="radio" name="stars" value="4" />
-              <span class="icon">★</span>
-              <span class="icon">★</span>
-              <span class="icon">★</span>
-              <span class="icon">★</span>
-            </label>
-            <label>
-              <input type="radio" name="stars" value="5" />
-              <span class="icon">★</span>
-              <span class="icon">★</span>
-              <span class="icon">★</span>
-              <span class="icon">★</span>
-              <span class="icon">★</span>
-            </label>
-        </div>
-
-        <input type="submit">
+    <form action="/journal/addSession" method="POST">
+        Date: <input type="date" value="<%= currentDate %>" name="sessionDate">
+        Spot: <input type="text" name="sessionSpot">
+        Rating: 
+            <input type="radio" name="sessionRating" value="1" id="1">
+            <label for="1">1</label>
+            <input type="radio" name="sessionRating" id="2">
+            <label for="2">2</label>
+            <input type="radio" name="sessionRating" value="3" id="3">
+            <label for="3">3</label>
+            <input type="radio" name="sessionRating" value="4" id="4">
+            <label for="4">4</label>
+            <input type="radio" name="sessionRating" value="5" id="5">
+            <label for="5">5</label>
+        <input type="submit" value="Submit Session">
     </form>
 
     

@@ -4,4 +4,6 @@ const journalController = require('../controllers/journal')
 
 router.get('/', journalController.getIndex)
 
+router.post('/addSession', journalController.addSession)
+
 module.exports = router

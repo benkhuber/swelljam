@@ -5,5 +5,5 @@ Array.from(rating).forEach( (el) => {
 })
 
 function getRating() {
-    console.log('yes')
+    console.log(el)
 }
