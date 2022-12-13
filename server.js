@@ -6,6 +6,7 @@ const bodyParser = require("body-parser")
 
 const homeRoutes = require('./routes/home')
 const journalRoutes = require('./routes/journal')
+const spotListRoutes = require('./routes/spotList')
 
 require('dotenv').config({path: './config/.env'})
 
@@ -19,6 +20,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use('/', homeRoutes)
 app.use('/journal', journalRoutes)
+app.use('/spotList', spotListRoutes)
 
 app.listen(process.env.PORT, () => {
     console.log('server running')

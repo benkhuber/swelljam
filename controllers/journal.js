@@ -1,7 +1,8 @@
 const Journal = require('../models/Journal')
+const SpotList = require('../models/Spots')
 
 module.exports = {
-    getIndex: (req,res) => {
+    getIndex: async (req,res) => {
         try {
             date = new Date()
             let year = date.getFullYear()
@@ -11,7 +12,8 @@ module.exports = {
                 day = `0${day}`
             }
             let currentDate = `${year}-${month}-${day}`
-            res.render('journal.ejs', {currentDate : currentDate})
+            const spots = await SpotList.find()
+            res.render('journal.ejs', {currentDate : currentDate, spots: spots})
         } catch(err) {
         console.log(err)
         }

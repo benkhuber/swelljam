@@ -10,6 +10,7 @@
 <body>
     <header>
         <a href="/">Home</a>
+        <a href="/spotList">Spot List</a>
         <a href="/journal">Journal</a>
     </header>
 
@@ -17,7 +18,15 @@
 
     <form action="/journal/addSession" method="POST">
         Date: <input type="date" value="<%= currentDate %>" name="sessionDate">
-        Spot: <input type="text" name="sessionSpot">
+        <!-- Spot: <input type="text" name="sessionSpot"> -->
+        Spot: <select name="sessionSpot">
+            <% spots.forEach(el => {%>
+                <option value="<%=el.spot%>">
+                    <%= el.spot %>
+                </option>
+            <% }) %> 
+
+        </select>
         Rating: 
             <input type="radio" name="sessionRating" value="1" id="1">
             <label for="1">1</label>
