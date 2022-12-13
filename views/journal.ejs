@@ -41,7 +41,15 @@
         <input type="submit" value="Submit Session">
     </form>
 
-    
+    <section class="journalBoard">
+        <% journals.forEach(el => { %>
+            <div class="journalCard">
+                <div>Date: <%= el.date %></div>
+                <div>Spot: <%= el.spot %></div>
+                <div>Rating: <%= el.rating %></div>
+            </div>
+        <% }) %>
+    </section>
 
 
 

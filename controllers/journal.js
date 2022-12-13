@@ -13,7 +13,9 @@ module.exports = {
             }
             let currentDate = `${year}-${month}-${day}`
             const spots = await SpotList.find()
-            res.render('journal.ejs', {currentDate : currentDate, spots: spots})
+            const journals = await Journal.find()
+            res.render('journal.ejs', {currentDate : currentDate, spots: spots, journals : journals})
+            console.log(journals)
         } catch(err) {
         console.log(err)
         }
