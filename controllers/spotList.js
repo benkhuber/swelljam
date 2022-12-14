@@ -17,5 +17,14 @@ module.exports = {
         } catch(err) {
             console.log(err)
         }
+    },
+    deleteSpot: async (req,res) => {
+        try {
+            await SpotList.findOneAndDelete({_id:req.body.spotIdFromJSFile})
+            console.log('deleted todo')
+            res.json('deleted it')
+        } catch(err) {
+            console.log(err)
+        }
     }
 }

@@ -43,11 +43,13 @@
 
     <section class="journalBoard">
         <% journals.forEach(el => { %>
-            <div class="journalCard">
+            <div class="journalCard" data-id="<%=el._id%>">
                 <div>Date: <%= el.date %></div>
                 <div>Spot: <%= el.spot %></div>
                 <div>Rating: <%= el.rating %></div>
+                <button class="del">Delete Spot</button>
             </div>
+
         <% }) %>
     </section>
 
