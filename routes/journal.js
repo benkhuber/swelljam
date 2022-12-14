@@ -6,4 +6,6 @@ router.get('/', journalController.getIndex)
 
 router.post('/addSession', journalController.addSession)
 
+router.delete('/deleteSession', journalController.deleteSession)
+
 module.exports = router

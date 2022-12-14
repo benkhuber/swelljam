@@ -28,5 +28,15 @@ module.exports = {
         } catch(err) {
             console.log(err)
         }
+    },
+    deleteSession: async (req,res) => {
+        try {
+            await Journal.findOneAndDelete({_id:req.body.journalIdFromJSFile})
+            console.log('deleted todo')
+            res.json('deleted it')
+            res.redirect('/journal')
+        } catch(err) {
+            console.log(err)
+        }
     }
 }
