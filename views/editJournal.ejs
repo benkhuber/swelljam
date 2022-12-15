@@ -5,25 +5,24 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <header>
-        <a href="/">Home</a>
-        <a href="/spotList">Spot List</a>
-        <a href="/journal">Journal</a>
-    </header>
-
-    <h1>JOURNAL</h1>
+    <h1>EDIT SESSION</h1>
 
     <form action="/journal/addSession" method="POST">
-        Date: <input type="date" value="<%= currentDate %>" name="sessionDate">
+        Date: <input type="date" value="<%= session.date %>" name="sessionDate">
         Spot: <select name="sessionSpot">
-            <% spots.forEach(el => {%>
+           <%  spots.forEach(el => {
+            if (el.spot === session.spot) { %>
+                <option value="<%=session.spot%>" selected="selected">
+                    <%= session.spot %>
+                </option>
+            <% } else { %>
                 <option value="<%=el.spot%>">
                     <%= el.spot %>
                 </option>
-            <% }) %> 
+            <% }
+           }) %>
 
         </select>
         Rating: 
@@ -39,22 +38,5 @@
             <label for="5">5</label>
         <input type="submit" value="Submit Session">
     </form>
-
-    <section class="journalBoard">
-        <% journals.forEach(el => { %>
-            <div class="journalCard" data-id="<%=el._id%>">
-                <div>Date: <%= el.date %></div>
-                <div>Spot: <%= el.spot %></div>
-                <div>Rating: <%= el.rating %></div>
-                <button class="del">Delete Session</button>
-                <button class="edit">Edit Session</button>
-            </div>
-
-        <% }) %>
-    </section>
-
-
-
-    <script src="/js/journal.js"></script>
 </body>
 </html>

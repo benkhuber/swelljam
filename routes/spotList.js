@@ -8,4 +8,5 @@ router.post('/addSpot', spotListController.addSpot)
 
 router.delete('/deleteSpot', spotListController.deleteSpot)
 
+
 module.exports = router

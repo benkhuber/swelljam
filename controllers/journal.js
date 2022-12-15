@@ -15,7 +15,7 @@ module.exports = {
             const spots = await SpotList.find()
             const journals = await Journal.find()
             res.render('journal.ejs', {currentDate : currentDate, spots: spots, journals : journals})
-            console.log(journals)
+            return
         } catch(err) {
         console.log(err)
         }
@@ -25,6 +25,7 @@ module.exports = {
             await Journal.create({date: req.body.sessionDate, spot: req.body.sessionSpot, rating: req.body.sessionRating})
             console.log('session added')
             res.redirect('/journal')
+            return
         } catch(err) {
             console.log(err)
         }
@@ -34,9 +35,15 @@ module.exports = {
             await Journal.findOneAndDelete({_id:req.body.journalIdFromJSFile})
             console.log('deleted todo')
             res.json('deleted it')
-            res.redirect('/journal')
         } catch(err) {
             console.log(err)
         }
+    },
+    editSession: async (req, res) => {
+        const session = await Journal.findOne({
+            _id: req.params.id
+        })
+        const spots = await SpotList.find()
+        res.render('editJournal.ejs', {session: session, spots: spots})
     }
 }

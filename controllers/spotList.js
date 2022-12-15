@@ -14,6 +14,7 @@ module.exports = {
             await SpotList.create({spot: req.body.spotToAdd})
             console.log('Spot added')
             res.redirect('/spotList')
+            return
         } catch(err) {
             console.log(err)
         }
@@ -21,8 +22,9 @@ module.exports = {
     deleteSpot: async (req,res) => {
         try {
             await SpotList.findOneAndDelete({_id:req.body.spotIdFromJSFile})
-            console.log('deleted todo')
             res.json('deleted it')
+            res.redirect('/spotList')
+            return
         } catch(err) {
             console.log(err)
         }
