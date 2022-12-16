@@ -10,4 +10,6 @@ router.delete('/deleteSession', journalController.deleteSession)
 
 router.get('/edit/:id', journalController.editSession)
 
+router.put('/saveSession', journalController.saveSession)
+
 module.exports = router

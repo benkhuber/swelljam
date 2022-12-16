@@ -45,5 +45,10 @@ module.exports = {
         })
         const spots = await SpotList.find()
         res.render('editJournal.ejs', {session: session, spots: spots})
+    },
+    saveSession: async (req,res) => {
+        const session = await Journal.findOneAndUpdate({_id:req.body.journalIdFromJSFile},{date: req.body.sessionDate, spot: req.body.sessionSpot, rating: req.body.sessionRating})
+        console.log('session updated')
+        res.redirect('/journal')
     }
 }

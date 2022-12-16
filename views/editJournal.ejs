@@ -9,7 +9,7 @@
 <body>
     <h1>EDIT SESSION</h1>
 
-    <form action="/journal/addSession" method="POST">
+    <!-- <form action="/journal/saveSession" method="POST" data-id="<%= session._id%>">
         Date: <input type="date" value="<%= session.date %>" name="sessionDate">
         Spot: <select name="sessionSpot">
            <%  spots.forEach(el => {
@@ -26,17 +26,50 @@
 
         </select>
         Rating: 
-            <input type="radio" name="sessionRating" value="1" id="1">
-            <label for="1">1</label>
-            <input type="radio" name="sessionRating" value="2" id="2">
-            <label for="2">2</label>
-            <input type="radio" name="sessionRating" value="3" id="3">
-            <label for="3">3</label>
-            <input type="radio" name="sessionRating" value="4" id="4">
-            <label for="4">4</label>
-            <input type="radio" name="sessionRating" value="5" id="5">
-            <label for="5">5</label>
-        <input type="submit" value="Submit Session">
-    </form>
+
+        <% for (let i = 1; i <= 5; i++) {
+                if (i == session.rating) { %>
+                    <input type="radio" name="sessionRating" value="<%= i %>" id="<%= i %>" checked>
+                    <label for="<%= i %>"><%= i %></label> 
+                <% } else { %>
+                    <input type="radio" name="sessionRating" value="<%= i %>" id="<%= i %>">
+                    <label for="<%= i %>"><%= i %></label> 
+               <% }
+            } %>
+        <input type="submit" value="Save Session">
+    </form> -->
+
+    <div data-id="<%= session._id%>">
+        Date: <input type="date" value="<%= session.date %>" name="sessionDate">
+        Spot: <select name="sessionSpot">
+           <%  spots.forEach(el => {
+            if (el.spot === session.spot) { %>
+                <option value="<%=session.spot%>" selected="selected">
+                    <%= session.spot %>
+                </option>
+            <% } else { %>
+                <option value="<%=el.spot%>">
+                    <%= el.spot %>
+                </option>
+            <% }
+           }) %>
+
+        </select>
+        Rating: 
+
+        <% for (let i = 1; i <= 5; i++) {
+                if (i == session.rating) { %>
+                    <input type="radio" name="sessionRating" value="<%= i %>" id="<%= i %>" checked>
+                    <label for="<%= i %>"><%= i %></label> 
+                <% } else { %>
+                    <input type="radio" name="sessionRating" value="<%= i %>" id="<%= i %>">
+                    <label for="<%= i %>"><%= i %></label> 
+               <% }
+            } %>
+        <button class="saveEdit">Save Session</button>
+    </div>
+
+
+    <script src="/js/editJournal.js"></script>
 </body>
 </html>
