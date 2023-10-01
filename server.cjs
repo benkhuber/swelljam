@@ -8,9 +8,24 @@ app.use(cors());
 
 app.use(express.json());
 
-app.get('/api/buoydata', async (req, res) => {
+app.get('/api/buoydata/realtime/:stationId', async (req, res) => {
   try {
-    const apiUrl = 'https://www.ndbc.noaa.gov/data/realtime2/46253.txt';
+    const stationId = req.params.stationId
+    const apiUrl = `https://www.ndbc.noaa.gov/data/realtime2/${stationId}.txt`;
+    const response = await axios.get(apiUrl);
+    const data = response.data;
+    res.setHeader('Content-Type', 'text/plain');
+    res.send(data);
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    res.status(500).send('Error fetching data');
+  }
+});
+
+app.get('/api/buoydata/spectral/:stationId', async (req, res) => {
+  try {
+    const stationId = req.params.stationId
+    const apiUrl = `https://www.ndbc.noaa.gov/data/realtime2/${stationId}.spec`;
     const response = await axios.get(apiUrl);
     const data = response.data;
     res.setHeader('Content-Type', 'text/plain');

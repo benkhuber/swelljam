@@ -8,7 +8,7 @@ function App() {
   return (
       <div>
         <h1>SwellJam</h1>
-        <BuoyData />
+        <BuoyData currentStationId='46253'/>
       </div>
   )
 }

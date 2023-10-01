@@ -1,32 +1,71 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
-const BuoyData = () => {
-    const apiUrl = `http://localhost:3001/api/buoydata`
+const BuoyData = ( {currentStationId} ) => {
     const [data, setData] = useState([])
+    const [swellData, setSwellData] = useState([])
 
+    const apiUrl = `http://localhost:3001/api/buoydata/realtime/${currentStationId}`
+    const spectralApiURL = `http://localhost:3001/api/buoydata/spectral/${currentStationId}`
+
+    console.log(apiUrl)
+    console.log(spectralApiURL)
+1
     const fetchData = async () => {
         try {
           const response = await fetch(apiUrl);
+          const spectralResponse = await fetch(spectralApiURL);
           if (!response.ok) {
             throw new Error('Network response was not ok');
           }
+          if (!spectralResponse.ok) {
+            throw new Error('Network response was not ok');
+          }
           const textData = await response.text();
+          const spectralData = await spectralResponse.text();
           setData(textData);
+          setSwellData(spectralData)
         } catch (error) {
           console.error('Error fetching data:', error);
         }
       };
 
-      fetchData()
-      let firstWaveHeight = null
-      let wavePeriod = null
-      let waveDirection = null
+    
 
-      const lines = data.toString().split('\n');
+    useEffect(() => {
+        fetchData()
+        console.log('DATA FETCH')
+    }, [currentStationId])
 
+    let firstWaveHeight = null
+    let wavePeriod = null
+    let waveDirection = null
+    let currentWaterTemp = null
+    let lastReadingDate = null
+    let lastReadingTime = null
+
+    let spectralSwellDirection = null
+
+    const spectralLines = swellData.toString().split('\n')
+
+    for (const line of spectralLines) {
+        const values = line.trim().split(/\s+/);
+
+        if (values.length === 15) {
+            const swellDirection = values[10]
+
+            if (swellDirection !== 'SwD') {
+                if (swellDirection !== '-') {
+                    spectralSwellDirection = swellDirection
+                    break;
+                }
+            }    
+        }
+    }
+
+    const lines = data.toString().split('\n');
+   
       for (const line of lines) {
         const values = line.trim().split(/\s+/);
-        console.log(values) 
  
         if (values.length === 19) {
           const year = values[0];
@@ -54,15 +93,17 @@ const BuoyData = () => {
                 firstWaveHeight = parseFloat(waveHeight)
                 wavePeriod = parseFloat(dominantPeriod)
                 waveDirection = parseFloat(meanWaveDirection)
+                currentWaterTemp = parseFloat(waterTemperature)
+                lastReadingDate = `${parseFloat(month)} / ${parseFloat(day)} / ${parseFloat(year)}`
+                lastReadingTime = `${parseFloat(hour - 7)}:${parseFloat(minute)}`
                 break;
                 }
             }
-
-        
         }
     }
 
     let waveHeightConvertedToFeet = (firstWaveHeight * 3.28084).toFixed(1)
+    currentWaterTemp = (currentWaterTemp * (9/5) + 32).toFixed(0)
 
     const getSwellDirectionLabel = (degrees) => {
         if (degrees >= 30 && degrees < 60) {
@@ -85,13 +126,15 @@ const BuoyData = () => {
       };
 
   return (
-    <div>
+    <div className='card'>
         <div>San Pedro Buoy</div>
+        <div>Last Reading: {lastReadingDate} @ {lastReadingTime}</div>
         <div>Swell Height: {waveHeightConvertedToFeet} ft</div>
         <div>Dominant Period: {wavePeriod} s</div>
         <div>Swell Direction: {getSwellDirectionLabel(waveDirection)} @ {waveDirection} deg</div>
+        <div>Water Temp: {currentWaterTemp} F</div>
+        <div>{spectralSwellDirection}</div>
     </div>
-
   )
 }
 
