@@ -19,6 +19,8 @@ const BuoyData = () => {
 
       fetchData()
       let firstWaveHeight = null
+      let wavePeriod = null
+      let waveDirection = null
 
       const lines = data.toString().split('\n');
 
@@ -50,16 +52,45 @@ const BuoyData = () => {
           if (waveHeight !== 'WVHT') {
             if (waveHeight !== 'm') {
                 firstWaveHeight = parseFloat(waveHeight)
+                wavePeriod = parseFloat(dominantPeriod)
+                waveDirection = parseFloat(meanWaveDirection)
                 break;
                 }
             }
+
+        
         }
     }
 
-    console.log(firstWaveHeight)
+    let waveHeightConvertedToFeet = (firstWaveHeight * 3.28084).toFixed(1)
+
+    const getSwellDirectionLabel = (degrees) => {
+        if (degrees >= 30 && degrees < 60) {
+          return 'NE';
+        } else if (degrees >= 60 && degrees < 120) {
+          return 'E';
+        } else if (degrees >= 120 && degrees < 150) {
+          return 'SE';
+        } else if (degrees >= 150 && degrees < 210) {
+          return 'S';
+        } else if (degrees >= 210 && degrees < 240) {
+          return 'SW';
+        } else if (degrees >= 240 && degrees < 300) {
+          return 'W';
+        } else if (degrees >= 300 && degrees < 330) {
+          return 'NW';
+        } else {
+          return 'N'; // For degrees between 330 and 30
+        }
+      };
 
   return (
-    <div>{firstWaveHeight} m</div>
+    <div>
+        <div>Swell Height: {waveHeightConvertedToFeet} ft</div>
+        <div>Dominant Period: {wavePeriod} s</div>
+        <div>Swell Direction: {getSwellDirectionLabel(waveDirection)} @ {waveDirection} deg</div>
+    </div>
+
   )
 }
 
