@@ -86,6 +86,7 @@ const BuoyData = () => {
 
   return (
     <div>
+        <div>San Pedro Buoy</div>
         <div>Swell Height: {waveHeightConvertedToFeet} ft</div>
         <div>Dominant Period: {wavePeriod} s</div>
         <div>Swell Direction: {getSwellDirectionLabel(waveDirection)} @ {waveDirection} deg</div>
