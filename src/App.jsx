@@ -4,16 +4,16 @@ import './App.css';
 import Card from './Card';
 
 function App() {
-  const currentStationId = '46253';
   const [data, setData] = useState([]);
   const [spectralData, setSpectralData] = useState([]);
   const [allStationData, setAllStationData] = useState([]);
   const [buoyStations, setBuoyStations] = useState([]);
+  const [selectedStation, setSelectedStation] = useState('46253');
 
   // API URL for current conditions, includes dominant swell data
-  const apiUrl = `http://localhost:3001/api/buoydata/realtime/${currentStationId}`;
+  const apiUrl = `http://localhost:3001/api/buoydata/realtime/${selectedStation}`;
   // API URL for spectral conditions, includes individual swell data
-  const spectralApiUrl = `http://localhost:3001/api/buoydata/spectral/${currentStationId}`;
+  const spectralApiUrl = `http://localhost:3001/api/buoydata/spectral/${selectedStation}`;
   // API URL for stations,
   const stationApiURL = 'http://localhost:3001/api/buoydata/allstations';
 
@@ -44,8 +44,10 @@ function App() {
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (selectedStation) {
+      fetchData();
+    }
+  }, [selectedStation]);
 
   // Inputs the swell direction as a param and outputs a cardinal description.
   const getSwellDirectionLabel = (degrees) => {
@@ -171,7 +173,7 @@ function App() {
     const stations = xmlDoc.getElementsByTagName('station');
 
     // Iterate through the stations and extract attributes
-    for (let i = 0; i < stations.length; i += 1) {
+    for (let i = 0; i < stations.length; i++) {
       const station = stations[i];
       const id = station.getAttribute('id');
       const lat = station.getAttribute('lat');
@@ -187,7 +189,7 @@ function App() {
       // const dart = station.getAttribute('dart');
 
       // Checks if station type is buoy. If true adds station info to parsedBuoyStations array
-      if (type === 'buoy') {
+      if (type === 'buoy' && name.includes(', CA')) {
         const parsedBuoyStation = {
           id,
           lat,
@@ -210,12 +212,21 @@ function App() {
     }
   }, [allStationData]);
 
-  console.log(buoyStations);
+  const handleStationChange = (e) => {
+    setSelectedStation(e.target.value);
+  }
 
   return (
     <div>
       <h1>SwellJam</h1>
-      <h2>San Pedro Buoy</h2>
+
+      <select value={selectedStation} onChange={handleStationChange}>
+        {buoyStations.map((station, index) => (
+          <option key={index} value={station.id}>
+            {station.name}
+          </option>
+        ))};
+      </select>
       <div className="dataGrid">
         <Card value={currentConditions.significantHeight} description="Significant Height" />
         <Card value={currentConditions.peakPeriod} description="Peak Period" />
