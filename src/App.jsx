@@ -227,6 +227,8 @@ function App() {
           </option>
         ))};
       </select>
+
+      <h2>{selectedStation}</h2>
       <div className="dataGrid">
         <Card value={currentConditions.significantHeight} description="Significant Height" />
         <Card value={currentConditions.peakPeriod} description="Peak Period" />
