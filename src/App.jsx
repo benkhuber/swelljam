@@ -1,6 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import { hydrate } from 'react-dom';
 import Card from './Card';
 
 function App() {
@@ -61,9 +62,15 @@ function App() {
     dominantSwellDirection: 'No Data',
     peakPeriod: 'No Data',
     currentWaterTemperature: 'No Data',
+    individualSwellHeight: 'No Data',
+    individualSwellPeriod: 'No Data',
+    individualSwellDirection: 'No Data',
+    windSwellHeight: 'No Data',
+    windSwellPeriod: 'No Data',
+    windSwellDirection: 'No Data',
   };
 
-  function parseDominantSwellData() {
+  const parseDominantSwellData = () => {
   // API request returns a text file. Splits the text into lines based off line breaks
     const lines = data.toString().split('\n');
 
@@ -107,10 +114,42 @@ function App() {
         }
       }
     }
-  }
+  };
+
+  const parseSpectralSwellData = () => {
+    // API request returns a text file. Splits the text into lines based off line breaks
+    const lines = spectralData.toString().split('\n');
+
+    // Loops through lines and splits at white space.
+    for (const line of lines) {
+      const values = line.trim().split(/\s+/);
+
+      // Length checks that all columns are present
+      if (values.length === 15) {
+        const swellHeight = values[6];
+        const swellPeriod = values[7];
+        const windWaveHeight = values[8];
+        const windWavePeriod = values[9];
+        const swellDirection = values[10];
+        const windWaveDirection = values[11];
+
+        if (swellHeight !== 'SwH') {
+          if (swellHeight !== 'm') {
+            currentConditions.individualSwellHeight = `${(parseFloat(swellHeight) * 3.28084).toFixed(1)} ft`;
+            currentConditions.individualSwellPeriod = `${parseFloat(swellPeriod)} s`;
+            currentConditions.individualSwellDirection = swellDirection;
+            currentConditions.windSwellHeight = `${(parseFloat(windWaveHeight) * 3.28084).toFixed(1)} ft`;
+            currentConditions.windSwellPeriod = `${parseFloat(windWavePeriod)} s`;
+            currentConditions.windSwellDirection = windWaveDirection;
+          }
+        }
+      }
+    }
+  };
 
   parseDominantSwellData();
-
+  parseSpectralSwellData();
+  console.log(spectralData);
   return (
     <div>
       <h1>SwellJam</h1>
@@ -119,6 +158,13 @@ function App() {
         <Card value={currentConditions.peakPeriod} description="Peak Period" />
         <Card value={currentConditions.dominantSwellDirection} description="Mean Direction" />
         <Card value={currentConditions.currentWaterTemperature} description="Water Temperature" />
+        <Card value={currentConditions.individualSwellHeight} description="Individual Swell Height" />
+        <Card value={currentConditions.individualSwellPeriod} description="Individual Swell Period" />
+        <Card value={currentConditions.individualSwellDirection} description="Individual Swell Direction" />
+        <Card value={currentConditions.windSwellHeight} description="Wind Swell Height" />
+        <Card value={currentConditions.windSwellPeriod} description="Wind Swell Period" />
+        <Card value={currentConditions.windSwellDirection} description="Wind Swell Direction" />
+
       </div>
     </div>
   );
