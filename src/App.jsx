@@ -1,7 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import { hydrate } from 'react-dom';
 import Card from './Card';
 
 function App() {
@@ -28,6 +27,7 @@ function App() {
       setData(textData);
       setSpectralData(spectralTextData);
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Error fetching data:', error);
     }
   };
@@ -149,7 +149,7 @@ function App() {
 
   parseDominantSwellData();
   parseSpectralSwellData();
-  console.log(spectralData);
+
   return (
     <div>
       <h1>SwellJam</h1>
