@@ -126,41 +126,11 @@ function BuoyData({ currentStationId }) {
   return (
     <div className="card">
       <div>San Pedro Buoy</div>
-      <div>Last Reading: {lastReadingDate}</div>
-      <div>
-        Last Reading:
-        {lastReadingDate}
-        {' '}
-        @
-        {lastReadingTime}
-      </div>
-      <div>
-        Swell Height:
-        {waveHeightConvertedToFeet}
-        {' '}
-        ft
-      </div>
-      <div>
-        Dominant Period:
-        {wavePeriod}
-        {' '}
-        s
-      </div>
-      <div>
-        Swell Direction:
-        {getSwellDirectionLabel(waveDirection)}
-        {' '}
-        @
-        {waveDirection}
-        {' '}
-        deg
-      </div>
-      <div>
-        Water Temp:
-        {currentWaterTemp}
-        {' '}
-        F
-      </div>
+      <div>Last Reading: {lastReadingDate} @ {lastReadingTime}</div>
+      <div>Swell Height: {waveHeightConvertedToFeet} ft</div>
+      <div>Dominant Period: {wavePeriod} s</div>
+      <div>Swell Direction: {getSwellDirectionLabel(waveDirection)} @ {waveDirection} deg</div>
+      <div>Water Temp: {currentWaterTemp} F</div>
       <div>{spectralSwellDirection}</div>
     </div>
   );
