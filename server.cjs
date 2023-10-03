@@ -37,6 +37,18 @@ app.get('/api/buoydata/spectral/:stationId', async (req, res) => {
   }
 });
 
+app.get('/api/buoydata/allstations', async (req, res) => {
+  try {
+    const apiUrl = 'https://www.ndbc.noaa.gov/activestations.xml';
+    const response = await axios.get(apiUrl);
+    const { data } = response;
+    res.send(data);
+  } catch (error) {
+    console.error('Error fetching station data:', error);
+    res.status(500).send('Error fetching data');
+  }
+});
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

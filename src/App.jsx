@@ -7,25 +7,36 @@ function App() {
   const currentStationId = '46253';
   const [data, setData] = useState([]);
   const [spectralData, setSpectralData] = useState([]);
+  const [allStationData, setAllStationData] = useState([]);
+  const [buoyStations, setBuoyStations] = useState([]);
+
   // API URL for current conditions, includes dominant swell data
   const apiUrl = `http://localhost:3001/api/buoydata/realtime/${currentStationId}`;
   // API URL for spectral conditions, includes individual swell data
   const spectralApiUrl = `http://localhost:3001/api/buoydata/spectral/${currentStationId}`;
+  // API URL for stations,
+  const stationApiURL = 'http://localhost:3001/api/buoydata/allstations';
 
   const fetchData = async () => {
     try {
       const response = await fetch(apiUrl);
       const spectralResponse = await (fetch(spectralApiUrl));
+      const allStationsResponse = await (fetch(stationApiURL));
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
       if (!spectralResponse.ok) {
         throw new Error('Network response was not ok');
       }
+      if (!allStationsResponse.ok) {
+        throw new Error('Network response was not ok');
+      }
       const textData = await response.text();
       const spectralTextData = await spectralResponse.text();
+      const allStationsRawData = await allStationsResponse.text();
       setData(textData);
       setSpectralData(spectralTextData);
+      setAllStationData(allStationsRawData);
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error('Error fetching data:', error);
@@ -147,12 +158,64 @@ function App() {
     }
   };
 
+  const parseAllStationRawData = () => {
+    const xmlString = allStationData;
+    const parsedBuoyStations = [];
+    // Create a DOMParser instance
+    const parser = new DOMParser();
+
+    // Parse the XML string
+    const xmlDoc = parser.parseFromString(xmlString, 'text/xml');
+
+    // Extract data from the XML document
+    const stations = xmlDoc.getElementsByTagName('station');
+
+    // Iterate through the stations and extract attributes
+    for (let i = 0; i < stations.length; i += 1) {
+      const station = stations[i];
+      const id = station.getAttribute('id');
+      const lat = station.getAttribute('lat');
+      const lon = station.getAttribute('lon');
+      // const elev = station.getAttribute('elev');
+      const name = station.getAttribute('name');
+      // const owner = station.getAttribute('owner');
+      // const pgm = station.getAttribute('pgm');
+      const type = station.getAttribute('type');
+      // const met = station.getAttribute('met');
+      // const currents = station.getAttribute('currents');
+      // const waterquality = station.getAttribute('waterquality');
+      // const dart = station.getAttribute('dart');
+
+      // Checks if station type is buoy. If true adds station info to parsedBuoyStations array
+      if (type === 'buoy') {
+        const parsedBuoyStation = {
+          id,
+          lat,
+          lon,
+          name,
+        };
+        parsedBuoyStations.push(parsedBuoyStation);
+      }
+    }
+    setBuoyStations(parsedBuoyStations);
+  };
+
   parseDominantSwellData();
   parseSpectralSwellData();
+
+  // Calls the parseAllStationRawData function when allStationData changes
+  useEffect(() => {
+    if (allStationData) {
+      parseAllStationRawData();
+    }
+  }, [allStationData]);
+
+  console.log(buoyStations);
 
   return (
     <div>
       <h1>SwellJam</h1>
+      <h2>San Pedro Buoy</h2>
       <div className="dataGrid">
         <Card value={currentConditions.significantHeight} description="Significant Height" />
         <Card value={currentConditions.peakPeriod} description="Peak Period" />
@@ -164,7 +227,6 @@ function App() {
         <Card value={currentConditions.windSwellHeight} description="Wind Swell Height" />
         <Card value={currentConditions.windSwellPeriod} description="Wind Swell Period" />
         <Card value={currentConditions.windSwellDirection} description="Wind Swell Direction" />
-
       </div>
     </div>
   );

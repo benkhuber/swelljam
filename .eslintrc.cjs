@@ -24,5 +24,6 @@ module.exports = {
   rules: {
     'react/prop-types': [0],
     'react/jsx-one-expression-per-line': [0],
+    allowForLoopAfterthoughts: true,
   },
 };
