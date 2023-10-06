@@ -83,6 +83,7 @@ function App() {
 
   // Initializes current conditions object with placeholder values. API request will update values.
   const currentConditions = {
+    localDate: 'No Data',
     currentStationName: 'Not Available',
     currentStationLat: 'N/A',
     currentStationLon: 'N/A',
@@ -108,6 +109,11 @@ function App() {
 
       // Length checks that all columns are present
       if (values.length === 19) {
+        const year = values[0];
+        const month = values[1];
+        const day = values[2];
+        const hour = values[3];
+        const minute = values[4];
         const waveHeight = values[8];
         const meanWaveDirection = values[11];
         const dominantPeriod = values[9];
@@ -117,6 +123,9 @@ function App() {
         // current conditions values are updated with numeric values.
         if (waveHeight !== 'WVHT') {
           if (waveHeight !== 'm') {
+            let utcDate = `${year}-${month}-${day}T${hour}:${minute}:00.000Z`
+            let localDate = new Date(utcDate);
+            currentConditions.currentDate = localDate
             if (waveHeight === 'MM') {
               currentConditions.significantHeight = 'No Data';
             } else {
@@ -246,7 +255,8 @@ function App() {
       </select>
       <SelectedBuoyInfo stationName={currentConditions.currentStationName} 
         stationLat={currentConditions.currentStationLat} 
-        stationLon={currentConditions.currentStationLat} />
+        stationLon={currentConditions.currentStationLon}
+        localDate={currentConditions.currentDate} />
       <div className="dataGrid">
         <Card value={currentConditions.significantHeight} 
           description="Significant Height" />
