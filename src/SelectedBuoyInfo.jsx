@@ -16,7 +16,7 @@ const SelectedBuoyInfo = ({ stationName, stationLat, stationLon, localDate }) =>
     <div>      
         <h2>{stationName}</h2>
         <h4>{stationLat}, {stationLon}</h4>
-        <h5>Last Reading: {timeDifferenceOutput}</h5>
+        <h5>Last Swell Reading: {timeDifferenceOutput}</h5>
     </div>
   )
 }

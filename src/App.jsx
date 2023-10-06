@@ -1,5 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './App.css';
 import Card from './Card';
 import SelectedBuoyInfo from './SelectedBuoyInfo';
@@ -242,8 +243,40 @@ function App() {
     
   }
 
+  let postData = {
+    name: 'hello',
+    location: 'HB State Beach'
+  }
+
+  const handlePostButtonClick = async () => {
+    try {
+      const response = await axios.post('http://localhost:3001/api/addData', postData);
+      console.log('Data added successfully:', response.data.message);
+    } catch (error) {
+      console.error('Error adding data:', error);
+    }
+  };
+  
+  // fetch('http://localhost:3001/api/addData', {
+  //   method: 'POST',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //   },
+  //   body: JSON.stringify(newData),
+  // })
+  //   .then((response) => response.json())
+  //   .then((data) => {
+  //     // Handle the response from the server
+  //     console.log(data);
+  //   })
+  //   .catch((error) => {
+  //     console.error('Error:', error);
+  //   });
+
+
   return (
     <div>
+      <button onClick={handlePostButtonClick}>Add Data</button>
       <h1>SwellJam</h1>
       <div>Select your local buoy:</div>
       <select value={selectedStationId} onChange={handleStationChange}>
