@@ -3,9 +3,12 @@ const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
 
+require('dotenv').config({path: './.env'})
+
 const app = express();
-const port = 3001;
-const url = 'mongodb+srv://benkhuber:fFkbGyL1fhm7AgLY@spots.yfq671c.mongodb.net/?retryWrites=true&w=majority'
+const port = process.env.PORT;
+const url = process.env.DB_STRING;
+
 
 app.use(cors());
 app.use(express.json());
@@ -37,7 +40,7 @@ app.post('/api/addData', async (req, res) => {
 
   try {
     const db = client.db('spots');
-    const collection = db.collection('surfspots'); // Replace with your collection name
+    const collection = db.collection('surfspots');
 
     const result = await collection.insertOne(newData);
     console.log('Data inserted:', result);
