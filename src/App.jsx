@@ -1,10 +1,10 @@
 /* eslint-disable no-restricted-syntax */
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import './App.css';
 import Card from './Card';
 import SelectedBuoyInfo from './SelectedBuoyInfo';
 import SpectralDataTable from './SpectralDataTable';
+import SelectSpotMenu from './SelectSpotMenu';
 
 function App() {
   const [data, setData] = useState([]);
@@ -53,14 +53,32 @@ function App() {
     }
   }, [selectedStationId]);
 
+  // Initializes current conditions object with placeholder values. API request will update values.
+  const currentConditions = {
+    localDate: 'No Data',
+    currentStationName: 'Not Available',
+    currentStationLat: 'N/A',
+    currentStationLon: 'N/A',
+    significantHeight: 'No Data',
+    dominantSwellDirection: 'No Data',
+    peakPeriod: 'No Data',
+    currentWaterTemperature: 'No Data',
+    individualSwellHeight: 'No Data',
+    individualSwellPeriod: 'No Data',
+    individualSwellDirection: 'No Data',
+    windSwellHeight: 'No Data',
+    windSwellPeriod: 'No Data',
+    windSwellDirection: 'No Data',
+  };
+
   const updateStationDisplay = () => {
-    let selectedStation =  buoyStations.find((station) => station.id === selectedStationId);
+    const selectedStation = buoyStations.find((station) => station.id === selectedStationId);
     if (selectedStation) {
-      currentConditions.currentStationName = selectedStation.name
-      currentConditions.currentStationLat = selectedStation.lat
-      currentConditions.currentStationLon = selectedStation.lon
+      currentConditions.currentStationName = selectedStation.name;
+      currentConditions.currentStationLat = selectedStation.lat;
+      currentConditions.currentStationLon = selectedStation.lon;
     }
-  }
+  };
 
   // Inputs the swell direction as a param and outputs a cardinal description.
   const getSwellDirectionLabel = (degrees) => {
@@ -80,24 +98,6 @@ function App() {
       return 'NW';
     }
     return 'N';
-  };
-
-  // Initializes current conditions object with placeholder values. API request will update values.
-  const currentConditions = {
-    localDate: 'No Data',
-    currentStationName: 'Not Available',
-    currentStationLat: 'N/A',
-    currentStationLon: 'N/A',
-    significantHeight: 'No Data',
-    dominantSwellDirection: 'No Data',
-    peakPeriod: 'No Data',
-    currentWaterTemperature: 'No Data',
-    individualSwellHeight: 'No Data',
-    individualSwellPeriod: 'No Data',
-    individualSwellDirection: 'No Data',
-    windSwellHeight: 'No Data',
-    windSwellPeriod: 'No Data',
-    windSwellDirection: 'No Data',
   };
 
   const parseDominantSwellData = () => {
@@ -124,9 +124,9 @@ function App() {
         // current conditions values are updated with numeric values.
         if (waveHeight !== 'WVHT') {
           if (waveHeight !== 'm') {
-            let utcDate = `${year}-${month}-${day}T${hour}:${minute}:00.000Z`
-            let localDate = new Date(utcDate);
-            currentConditions.currentDate = localDate
+            const utcDate = `${year}-${month}-${day}T${hour}:${minute}:00.000Z`;
+            const localDate = new Date(utcDate);
+            currentConditions.currentDate = localDate;
             if (waveHeight === 'MM') {
               currentConditions.significantHeight = 'No Data';
             } else {
@@ -240,44 +240,12 @@ function App() {
 
   const handleStationChange = (e) => {
     setSelectedStationId(e.target.value);
-    
-  }
-
-  let postData = {
-    name: 'hello',
-    location: 'HB State Beach'
-  }
-
-  const handlePostButtonClick = async () => {
-    try {
-      const response = await axios.post('http://localhost:3001/api/addData', postData);
-      console.log('Data added successfully:', response.data.message);
-    } catch (error) {
-      console.error('Error adding data:', error);
-    }
   };
-  
-  // fetch('http://localhost:3001/api/addData', {
-  //   method: 'POST',
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //   },
-  //   body: JSON.stringify(newData),
-  // })
-  //   .then((response) => response.json())
-  //   .then((data) => {
-  //     // Handle the response from the server
-  //     console.log(data);
-  //   })
-  //   .catch((error) => {
-  //     console.error('Error:', error);
-  //   });
-
 
   return (
     <div>
-      <button onClick={handlePostButtonClick}>Add Data</button>
       <h1>SwellJam</h1>
+      <SelectSpotMenu />
       <div>Select your local buoy:</div>
       <select value={selectedStationId} onChange={handleStationChange}>
         {buoyStations.map((station, index) => (
@@ -286,28 +254,38 @@ function App() {
           </option>
         ))};
       </select>
-      <SelectedBuoyInfo stationName={currentConditions.currentStationName} 
-        stationLat={currentConditions.currentStationLat} 
+      <SelectedBuoyInfo
+        stationName={currentConditions.currentStationName}
+        stationLat={currentConditions.currentStationLat}
         stationLon={currentConditions.currentStationLon}
-        localDate={currentConditions.currentDate} />
+        localDate={currentConditions.currentDate}
+      />
       <div className="dataGrid">
-        <Card value={currentConditions.significantHeight} 
-          description="Significant Height" />
-        <Card value={currentConditions.peakPeriod} 
-          description="Peak Period" />
-        <Card value={currentConditions.dominantSwellDirection} 
-          description="Mean Direction" />
-        <Card value={currentConditions.currentWaterTemperature} 
-          description="Water Temperature" />
-      </div>
-      <SpectralDataTable 
-          indSwellHeight={currentConditions.individualSwellHeight}
-          indSwellPeriod={currentConditions.individualSwellPeriod}
-          indSwellDirection={currentConditions.individualSwellDirection}
-          windSwellHeight={currentConditions.windSwellHeight}
-          windSwellPeriod={currentConditions.windSwellPeriod}
-          windSwellDirection={currentConditions.windSwellDirection}
+        <Card
+          value={currentConditions.significantHeight}
+          description="Significant Height"
         />
+        <Card
+          value={currentConditions.peakPeriod}
+          description="Peak Period"
+        />
+        <Card
+          value={currentConditions.dominantSwellDirection}
+          description="Mean Direction"
+        />
+        <Card
+          value={currentConditions.currentWaterTemperature}
+          description="Water Temperature"
+        />
+      </div>
+      <SpectralDataTable
+        indSwellHeight={currentConditions.individualSwellHeight}
+        indSwellPeriod={currentConditions.individualSwellPeriod}
+        indSwellDirection={currentConditions.individualSwellDirection}
+        windSwellHeight={currentConditions.windSwellHeight}
+        windSwellPeriod={currentConditions.windSwellPeriod}
+        windSwellDirection={currentConditions.windSwellDirection}
+      />
     </div>
   );
 }
