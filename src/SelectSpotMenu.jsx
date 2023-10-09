@@ -20,10 +20,11 @@ function SelectSpotMenu() {
 
   const handleStationChange = (e) => {
     setSelectedStationId(e.target.value);
-    console.log(selectedStationId);
   };
 
-  console.log(data);
+  useEffect(() => {
+    console.log(selectedStationId);
+  }, [selectedStationId]);
 
   return (
     <div>
