@@ -121,16 +121,25 @@ button:focus-visible {
 
 select {
 	width: 24rem;
+	position: relative;
 	font-size: 1rem;
 	height: 4rem;
-	border-radius: 4px;
+	border-radius: 8px;
 	padding: 1rem;
 	margin: 0.5rem;
 	cursor: pointer;
 }
 
+select-selected {
+	background-color: purple;
+}
+
 select.hover {
 	background-color: white;
+}
+
+option {
+	font-size: 20rem;
 }
 
 .gridContainer {

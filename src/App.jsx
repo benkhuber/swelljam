@@ -199,6 +199,7 @@ function App() {
     const stations = xmlDoc.getElementsByTagName('station');
 
     // Iterate through the stations and extract attributes
+    // eslint-disable-next-line no-plusplus
     for (let i = 0; i < stations.length; i++) {
       const station = stations[i];
       const id = station.getAttribute('id');
@@ -238,14 +239,14 @@ function App() {
     }
   }, [allStationData]);
 
-  const handleStationChange = (e) => {
-    setSelectedStationId(e.target.value);
+  const handleStationChange = (newSpotId) => {
+    setSelectedStationId(newSpotId);
   };
 
   return (
     <div>
       <h1>SwellJam</h1>
-      <SelectSpotMenu />
+      <SelectSpotMenu onSelectedSpotChange={handleStationChange} />
       <div>Select your local buoy:</div>
       <select value={selectedStationId} onChange={handleStationChange}>
         {buoyStations.map((station, index) => (

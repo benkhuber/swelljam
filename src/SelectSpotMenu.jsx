@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-function SelectSpotMenu() {
+function SelectSpotMenu({ onSelectedSpotChange }) {
   const [data, setData] = useState([]);
   const [selectedStationId, setSelectedStationId] = useState('');
 
@@ -19,20 +19,19 @@ function SelectSpotMenu() {
   }, []);
 
   const handleStationChange = (e) => {
-    setSelectedStationId(e.target.value);
-  };
-
-  useEffect(() => {
+    const newSelectedSpotId = e.target.value;
+    setSelectedStationId(newSelectedSpotId);
+    onSelectedSpotChange(newSelectedSpotId);
     console.log(selectedStationId);
-  }, [selectedStationId]);
+  };
 
   return (
     <div>
       <div>
         <h4>Select Spot:</h4>
         <select onChange={handleStationChange}>
-          {data.map((spot, index) => (
-            <option key={index} value={spot.spotBuoyIds[0]} id={spot._id}>
+          {data.map((spot) => (
+            <option value={spot.spotBuoyIds[0]} id={spot._id}>
               {spot.spotName}
             </option>
           ))};
