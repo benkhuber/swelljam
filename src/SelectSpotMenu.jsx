@@ -22,7 +22,6 @@ function SelectSpotMenu({ onSelectedSpotChange }) {
     const newSelectedSpotId = e.target.value;
     setSelectedStationId(newSelectedSpotId);
     onSelectedSpotChange(newSelectedSpotId);
-    console.log(selectedStationId);
   };
 
   return (
@@ -30,7 +29,7 @@ function SelectSpotMenu({ onSelectedSpotChange }) {
       <div>
         <h4>Select Spot:</h4>
         <select onChange={handleStationChange}>
-          {data.map((spot) => (
+          {data.map((spot, index) => (
             <option value={spot.spotBuoyIds[0]} id={spot._id}>
               {spot.spotName}
             </option>
