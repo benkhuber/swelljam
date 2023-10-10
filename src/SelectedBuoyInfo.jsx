@@ -16,7 +16,7 @@ function SelectedBuoyInfo({
 
   return (
     <div>
-      <h2>{stationName}</h2>
+      <h4>{stationName}</h4>
       <h4>{stationLat}, {stationLon}</h4>
       <h5>Last Swell Reading: {timeDifferenceOutput}</h5>
     </div>

@@ -4,6 +4,7 @@ import axios from 'axios';
 function SelectSpotMenu({ onSelectedSpotChange }) {
   const [data, setData] = useState([]);
   const [selectedStationId, setSelectedStationId] = useState('');
+  const [selectedSpotName, setSelectedSpotName] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -20,8 +21,15 @@ function SelectSpotMenu({ onSelectedSpotChange }) {
 
   const handleStationChange = (e) => {
     const newSelectedSpotId = e.target.value;
+    let newSelectedSpotName = '';
+    for (let i = 0; i < data.length; i++) {
+      if (e.target.value === data[i].spotBuoyIds[0]) {
+        newSelectedSpotName = data[i].spotName;
+      }
+    }
     setSelectedStationId(newSelectedSpotId);
-    onSelectedSpotChange(newSelectedSpotId);
+    onSelectedSpotChange(newSelectedSpotId, newSelectedSpotName);
+    setSelectedSpotName(newSelectedSpotName);
   };
 
   return (
@@ -30,7 +38,7 @@ function SelectSpotMenu({ onSelectedSpotChange }) {
         <h4>Select Spot:</h4>
         <select onChange={handleStationChange}>
           {data.map((spot, index) => (
-            <option value={spot.spotBuoyIds[0]} id={spot._id}>
+            <option key={index} value={spot.spotBuoyIds[0]} id={spot._id}>
               {spot.spotName}
             </option>
           ))};

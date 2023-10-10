@@ -12,6 +12,7 @@ function App() {
   const [allStationData, setAllStationData] = useState([]);
   const [buoyStations, setBuoyStations] = useState([]);
   const [selectedStationId, setSelectedStationId] = useState('46253');
+  const [selectedSpotName, setSelectedSpotName] = useState('');
 
   // API URL for current conditions, includes dominant swell data
   const apiUrl = `http://localhost:3001/api/buoydata/realtime/${selectedStationId}`;
@@ -239,28 +240,24 @@ function App() {
     }
   }, [allStationData]);
 
-  const handleStationChange = (newSpotId) => {
+  const handleStationChange = (newSpotId, newSpotName) => {
     setSelectedStationId(newSpotId);
+    console.log(newSpotId);
+    setSelectedSpotName(newSpotName);
+    console.log(newSpotName);
   };
 
   return (
     <div>
       <h1>SwellJam</h1>
       <SelectSpotMenu onSelectedSpotChange={handleStationChange} />
-      <div>Select your local buoy:</div>
-      <select value={selectedStationId} onChange={handleStationChange}>
-        {buoyStations.map((station, index) => (
-          <option key={index} value={station.id}>
-            {station.name}
-          </option>
-        ))};
-      </select>
       <SelectedBuoyInfo
         stationName={currentConditions.currentStationName}
         stationLat={currentConditions.currentStationLat}
         stationLon={currentConditions.currentStationLon}
         localDate={currentConditions.currentDate}
       />
+      <div>Selected Spot: {selectedSpotName}</div>
       <div className="dataGrid">
         <Card
           value={currentConditions.significantHeight}
