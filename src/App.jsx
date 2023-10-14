@@ -247,7 +247,7 @@ function App() {
 
   return (
     <div>
-      <h1>SwellJam HELLO</h1>
+      <h1>SwellJam</h1>
       <SelectSpotMenu onSelectedSpotChange={handleStationChange} />
       <SelectedBuoyInfo
         stationName={currentConditions.currentStationName}
