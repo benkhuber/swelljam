@@ -242,9 +242,7 @@ function App() {
 
   const handleStationChange = (newSpotId, newSpotName) => {
     setSelectedStationId(newSpotId);
-    console.log(newSpotId);
     setSelectedSpotName(newSpotName);
-    console.log(newSpotName);
   };
 
   return (
