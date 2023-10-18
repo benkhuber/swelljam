@@ -1,5 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import React, { useState, useEffect } from 'react';
+import Header from '../components/Header';
 import Card from '../Card';
 import SelectedBuoyInfo from '../SelectedBuoyInfo';
 import SpectralDataTable from '../SpectralDataTable';
@@ -246,7 +247,7 @@ function SpotForecast() {
 
   return (
     <div>
-      <h1>SwellJam</h1>
+      <Header />
       <SelectSpotMenu onSelectedSpotChange={handleStationChange} />
       <SelectedBuoyInfo
         stationName={currentConditions.currentStationName}
