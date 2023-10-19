@@ -15,7 +15,11 @@
 
 a {
 	font-weight: 500;
-	color: #646cff;
+	border: solid 2px white;
+	border-radius: 4px;
+	padding: 10px;
+	margin: 10px;
+	color: #ffffff;
 	text-decoration: inherit;
 }
 a:hover {
@@ -146,10 +150,31 @@ option {
 	display: grid;
 	grid-template-columns: auto auto auto;
 	grid-template-rows: auto;
-	height: 14rm;
+	height: 14rem;
 	row-gap: 1rem;
 }
 
 .gridItem {
 	text-align: center;
+}
+
+.header {
+	display: flex;
+	justify-content: space-between;
+	border-bottom: solid 3px white;
+	border-radius: 4px;
+}
+
+.homeHeader {
+	display: flex;
+}
+
+.headerLinkMenu {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#map {
+	height: 900px;
 }
