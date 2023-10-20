@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {
-  MapContainer, TileLayer, Marker, Popup,
+  MapContainer, TileLayer, Marker, Popup, LayersControl, LayerGroup,
 } from 'react-leaflet';
 import Header from '../components/Header';
 import '../index.css';
@@ -23,8 +23,6 @@ function Map() {
     fetchData();
   }, []);
 
-  console.log(data);
-
   return (
     <div>
       <Header />
@@ -33,15 +31,20 @@ function Map() {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {data.map((marker, index) => (
-          <Marker
-            key={index}
-            position={[marker.spotLat, marker.spotLon]}
-          >
-            <Popup>{marker.spotName}</Popup>
-
-          </Marker>
-        ))}
+        <LayersControl position="topright">
+          <LayersControl.Overlay name="Marker with popup">
+            <LayerGroup>
+              {data.map((marker, index) => (
+                <Marker
+                  key={index}
+                  position={[marker.spotLat, marker.spotLon]}
+                >
+                  <Popup>{marker.spotName}</Popup>
+                </Marker>
+              ))}
+            </LayerGroup>
+          </LayersControl.Overlay>
+        </LayersControl>
       </MapContainer>
     </div>
   );
