@@ -99,8 +99,9 @@ function Map() {
                   icon={customIcon}
                 >
                   <Popup className="popup">
-                    Station ID: {buoy.id} <br />
-                    Buoy Name: {buoy.name}
+                    <div>{buoy.name}</div><br />
+                    <div>{buoy.id} </div>
+                    <a href="/buoyreport">Go to Buoy</a>
                   </Popup>
                 </Marker>
               ))}

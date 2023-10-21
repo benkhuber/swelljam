@@ -180,19 +180,20 @@ option {
 }
 
 .leaflet-popup {
+	background-color: transparent;
 }
 
 .leaflet-popup-content-wrapper {
 	background-color: transparent;
-	border: 0px;
 }
 
 .leaflet-popup-content {
-	color: #333;
+	background-color: rgb(87, 104, 253);
+	border: solid 4px white;
+	color: white;
 	padding: 15px;
 	border-radius: 10px;
 }
 
 .popup {
-	background-color: white;
 }
