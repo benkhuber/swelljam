@@ -178,3 +178,21 @@ option {
 #map {
 	height: 900px;
 }
+
+.leaflet-popup {
+}
+
+.leaflet-popup-content-wrapper {
+	background-color: transparent;
+	border: 0px;
+}
+
+.leaflet-popup-content {
+	color: #333;
+	padding: 15px;
+	border-radius: 10px;
+}
+
+.popup {
+	background-color: white;
+}
