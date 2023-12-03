@@ -1,41 +1,82 @@
 import React, { useState, useEffect } from 'react';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import DatePicker from 'react-datepicker';
+import axios from 'axios';
 import Header from '../components/Header';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import 'react-datepicker/dist/react-datepicker.css';
 
 function AddSession() {
-  const [selectedSpot, setSelectedSpot] = useState('Huntington State Beach');
-  const [dateTimeSelect, setDateTimeSelect] = useState(new Date());
-  const [waveRating, setWaveRating] = useState(0);
-  const [sizeRating, setSizeRating] = useState(0);
-  const [windRating, setWindRating] = useState(0);
-  const [crowdRating, setCrowdRating] = useState(0);
+  const [sessionData, setSessionData] = useState({
+    selectedSpot: 'Huntington State Beach',
+    dateTimeSelect: new Date(),
+    waveRating: 0,
+    sizeRating: 0,
+    windRating: 0,
+    crowdRating: 0,
+  });
 
   const ratingScale = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   const handleSpotChange = (e) => {
-    setSelectedSpot(e.target.value);
+    setSessionData((prevSessionData) => ({
+      ...prevSessionData,
+      selectedSpot: e.target.value,
+    }));
   };
 
   const handleDateTimeSelect = (date) => {
-    setDateTimeSelect(date);
+    setSessionData((prevSessionData) => ({
+      ...prevSessionData,
+      dateTimeSelect: date,
+    }));
   };
 
   const handleWaveRatingChange = (newRating) => {
-    setWaveRating(newRating);
+    setSessionData((prevSessionData) => ({
+      ...prevSessionData,
+      waveRating: newRating,
+    }));
   };
 
   const handleSizeRatingChange = (newRating) => {
-    setSizeRating(newRating);
+    setSessionData((prevSessionData) => ({
+      ...prevSessionData,
+      sizeRating: newRating,
+    }));
   };
 
   const handleWindRatingChange = (newRating) => {
-    setWindRating(newRating);
+    setSessionData((prevSessionData) => ({
+      ...prevSessionData,
+      windRating: newRating,
+    }));
   };
 
   const handleCrowdRatingChange = (newRating) => {
-    setCrowdRating(newRating);
+    setSessionData((prevSessionData) => ({
+      ...prevSessionData,
+      crowdRating: newRating,
+    }));
   };
+
+  const handleSubmitSession = async () => {
+    try {
+      const response = await axios.post('http://localhost:3001/api/addSession', sessionData);
+      console.log('Data added successfully:', response.data.message);
+    } catch (error) {
+      console.error('Error adding data:', error);
+    }
+  };
+
+  useEffect(() => {
+    console.log(sessionData.selectedSpot);
+    console.log(sessionData.dateTimeSelect);
+    console.log(sessionData.waveRating);
+    console.log(sessionData.sizeRating);
+    console.log(sessionData.windRating);
+    console.log(sessionData.crowdRating);
+  }, [sessionData.selectedSpot]);
 
   useEffect(() => {
     const selectElement = document.getElementById('selectSpotMenu');
@@ -67,37 +108,35 @@ function AddSession() {
     });
   }, []);
 
-  console.log(selectedSpot);
-  console.log(waveRating);
-  console.log(sizeRating);
-  console.log(windRating);
-  console.log(crowdRating);
-  console.log(dateTimeSelect);
-
   return (
     <div>
       <Header />
       <h2>Add Session</h2>
-      <label htmlFor="selectSpotMenu">Select Spot:</label>
-      <select
-        id="selectSpotMenu"
-        onChange={handleSpotChange}
-        value={selectedSpot}
-        aria-label="Select a spot"
-      />
 
       <form>
-        <label htmlFor="sessionDateTime">When did you paddle out?</label>
-        <DatePicker
-          id="sessionDateTime"
-          selected={dateTimeSelect}
-          onChange={handleDateTimeSelect}
-          showIcon
-          showTimeSelect
-          dateFormat="MM/dd/yyyy h:mm aa"
-          timeCaption="Time"
-          className="datepicker"
-        />
+        <div>
+          <label htmlFor="selectSpotMenu">Select Spot:</label>
+          <select
+            id="selectSpotMenu"
+            onChange={handleSpotChange}
+            value={sessionData.selectedSpot}
+            aria-label="Select a spot"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="sessionDateTime">When did you paddle out?</label>
+          <DatePicker
+            id="sessionDateTime"
+            selected={sessionData.dateTimeSelect}
+            onChange={handleDateTimeSelect}
+            showIcon
+            showTimeSelect
+            dateFormat="MM/dd/yyyy h:mm aa"
+            timeCaption="Time"
+            className="datepicker"
+          />
+        </div>
 
         <h4>How were the waves? (1 = Terrible, 10 = Firing)</h4>
         <div>
@@ -108,7 +147,7 @@ function AddSession() {
               onClick={() => handleWaveRatingChange(number)}
               className="ratingButton"
               style={{
-                backgroundColor: number <= waveRating ? 'purple' : 'gray',
+                backgroundColor: number <= sessionData.waveRating ? 'purple' : 'gray',
               }}
             >
               {number}
@@ -125,7 +164,7 @@ function AddSession() {
               onClick={() => handleSizeRatingChange(number)}
               className="ratingButton"
               style={{
-                backgroundColor: number <= sizeRating ? 'purple' : 'gray',
+                backgroundColor: number <= sessionData.sizeRating ? 'purple' : 'gray',
               }}
             >
               {number}
@@ -142,7 +181,7 @@ function AddSession() {
               onClick={() => handleWindRatingChange(number)}
               className="ratingButton"
               style={{
-                backgroundColor: number <= windRating ? 'purple' : 'gray',
+                backgroundColor: number <= sessionData.windRating ? 'purple' : 'gray',
               }}
             >
               {number}
@@ -159,7 +198,7 @@ function AddSession() {
               onClick={() => handleCrowdRatingChange(number)}
               className="ratingButton"
               style={{
-                backgroundColor: number <= crowdRating ? 'purple' : 'gray',
+                backgroundColor: number <= sessionData.crowdRating ? 'purple' : 'gray',
               }}
             >
               {number}
@@ -168,9 +207,9 @@ function AddSession() {
         </div>
 
         <button
-          type="button"
-        >
-          Add Session
+          type="submit"
+          onClick={handleSubmitSession}
+        >Add Data
         </button>
       </form>
     </div>

@@ -51,6 +51,37 @@ app.post('/api/addData', async (req, res) => {
   }
 });
 
+app.post('/api/addSession', async (req, res) => {
+  const newData = req.body;
+
+  try {
+    const db = client.db('swelljam');
+    const collection = db.collection('sessions');
+
+    const result = await collection.insertOne(newData);
+    console.log('Data inserted:', result);
+
+    res.status(200).json({ message: 'Data added successfully' });
+  } catch (insertErr) {
+    console.error('Error inserting data:', insertErr);
+    res.status(500).json({ error: 'Failed to insert data' });
+  }
+});
+
+app.get('/api/getSessions', async (req, res) => {
+  try {
+    const db = client.db('swelljam');
+    const collection = db.collection('sessions');
+
+    const data = await collection.find({}).toArray();
+
+    res.status(200).json(data);
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    res.status(500).json({ error: 'Failed to fetch data' });
+  }
+});
+
 app.get('/api/getData', async (req, res) => {
   try {
     const db = client.db('spots');
