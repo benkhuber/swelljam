@@ -25,5 +25,11 @@ module.exports = {
     'react/prop-types': [0],
     'react/jsx-one-expression-per-line': [0],
     allowForLoopAfterthoughts: 0,
+    'jsx-a11y/label-has-associated-control': [
+      'error',
+      {
+        assert: 'either',
+      },
+    ],
   },
 };

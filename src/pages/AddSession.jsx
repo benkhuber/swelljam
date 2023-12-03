@@ -79,93 +79,100 @@ function AddSession() {
       <Header />
       <h2>Add Session</h2>
       <label htmlFor="selectSpotMenu">Select Spot:</label>
-      <select id="selectSpotMenu" onChange={handleSpotChange} value={selectedSpot} />
-
-      <h4>What day did you paddle out?</h4>
-      <DatePicker
-        selected={dateTimeSelect}
-        onChange={handleDateTimeSelect}
-        showIcon
-        showTimeSelect
-        dateFormat="MM/dd/yyyy h:mm aa"
-        timeCaption="Time"
-        className="datepicker"
+      <select
+        id="selectSpotMenu"
+        onChange={handleSpotChange}
+        value={selectedSpot}
+        aria-label="Select a spot"
       />
-      <h4>When did you paddle out?</h4>
-      <h4>How were the waves? (1 = Terrible, 10 = Firing)</h4>
 
-      <div>
-        {ratingScale.map((number) => (
-          <button
-            key={number}
-            type="button"
-            onClick={() => handleWaveRatingChange(number)}
-            className="ratingButton"
-            style={{
-              backgroundColor: number <= waveRating ? 'purple' : 'gray',
-            }}
-          >
-            {number}
-          </button>
-        ))}
-      </div>
+      <form>
+        <label htmlFor="sessionDateTime">When did you paddle out?</label>
+        <DatePicker
+          id="sessionDateTime"
+          selected={dateTimeSelect}
+          onChange={handleDateTimeSelect}
+          showIcon
+          showTimeSelect
+          dateFormat="MM/dd/yyyy h:mm aa"
+          timeCaption="Time"
+          className="datepicker"
+        />
 
-      <h4>How was the size? (1 = Tiny or Too Big, 10 = Perfect Size)</h4>
-      <div>
-        {ratingScale.map((number) => (
-          <button
-            key={number}
-            type="button"
-            onClick={() => handleSizeRatingChange(number)}
-            className="ratingButton"
-            style={{
-              backgroundColor: number <= sizeRating ? 'purple' : 'gray',
-            }}
-          >
-            {number}
-          </button>
-        ))}
-      </div>
+        <h4>How were the waves? (1 = Terrible, 10 = Firing)</h4>
+        <div>
+          {ratingScale.map((number) => (
+            <button
+              key={number}
+              type="button"
+              onClick={() => handleWaveRatingChange(number)}
+              className="ratingButton"
+              style={{
+                backgroundColor: number <= waveRating ? 'purple' : 'gray',
+              }}
+            >
+              {number}
+            </button>
+          ))}
+        </div>
 
-      <h4>How was the wind? (1 = Not for you, 10 = Chef&apos;s kiss)</h4>
-      <div>
-        {ratingScale.map((number) => (
-          <button
-            key={number}
-            type="button"
-            onClick={() => handleWindRatingChange(number)}
-            className="ratingButton"
-            style={{
-              backgroundColor: number <= windRating ? 'purple' : 'gray',
-            }}
-          >
-            {number}
-          </button>
-        ))}
-      </div>
+        <h4>How was the size? (1 = Tiny or Too Big, 10 = Perfect Size)</h4>
+        <div>
+          {ratingScale.map((number) => (
+            <button
+              key={number}
+              type="button"
+              onClick={() => handleSizeRatingChange(number)}
+              className="ratingButton"
+              style={{
+                backgroundColor: number <= sizeRating ? 'purple' : 'gray',
+              }}
+            >
+              {number}
+            </button>
+          ))}
+        </div>
 
-      <h4>How was the crowd? (1 = Mellow, 10 = Zoo)</h4>
-      <div>
-        {ratingScale.map((number) => (
-          <button
-            key={number}
-            type="button"
-            onClick={() => handleCrowdRatingChange(number)}
-            className="ratingButton"
-            style={{
-              backgroundColor: number <= crowdRating ? 'purple' : 'gray',
-            }}
-          >
-            {number}
-          </button>
-        ))}
-      </div>
+        <h4>How was the wind? (1 = Not for you, 10 = Chef&apos;s kiss)</h4>
+        <div>
+          {ratingScale.map((number) => (
+            <button
+              key={number}
+              type="button"
+              onClick={() => handleWindRatingChange(number)}
+              className="ratingButton"
+              style={{
+                backgroundColor: number <= windRating ? 'purple' : 'gray',
+              }}
+            >
+              {number}
+            </button>
+          ))}
+        </div>
 
-      <button
-        type="button"
-      >
-        Add Session
-      </button>
+        <h4>How was the crowd? (1 = Mellow, 10 = Zoo)</h4>
+        <div>
+          {ratingScale.map((number) => (
+            <button
+              key={number}
+              type="button"
+              onClick={() => handleCrowdRatingChange(number)}
+              className="ratingButton"
+              style={{
+                backgroundColor: number <= crowdRating ? 'purple' : 'gray',
+              }}
+            >
+              {number}
+            </button>
+          ))}
+        </div>
+
+        <button
+          type="button"
+        >
+          Add Session
+        </button>
+      </form>
     </div>
   );
 }
