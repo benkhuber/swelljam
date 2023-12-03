@@ -2,9 +2,17 @@ import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 
 function AddSession() {
+  const [selectedSpot, setSelectedSpot] = useState('Huntington State Beach');
   const [waveRating, setWaveRating] = useState(0);
   const [sizeRating, setSizeRating] = useState(0);
   const [windRating, setWindRating] = useState(0);
+  const [crowdRating, setCrowdRating] = useState(0);
+
+  const ratingScale = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+  const handleSpotChange = (e) => {
+    setSelectedSpot(e.target.value);
+  };
 
   const handleWaveRatingChange = (newRating) => {
     setWaveRating(newRating);
@@ -16,6 +24,10 @@ function AddSession() {
 
   const handleWindRatingChange = (newRating) => {
     setWindRating(newRating);
+  };
+
+  const handleCrowdRatingChange = (newRating) => {
+    setCrowdRating(newRating);
   };
 
   useEffect(() => {
@@ -48,17 +60,24 @@ function AddSession() {
     });
   }, []);
 
+  console.log(selectedSpot);
+  console.log(waveRating);
+  console.log(sizeRating);
+  console.log(windRating);
+  console.log(crowdRating);
+
   return (
     <div>
       <Header />
       <h2>Add Session</h2>
-      <h4>Select Spot:</h4>
-      <select id="selectSpotMenu" />
+      <label htmlFor="selectSpotMenu">Select Spot:</label>
+      <select id="selectSpotMenu" onChange={handleSpotChange} value={selectedSpot} />
       <h4>What day did you paddle out?</h4>
       <h4>When did you paddle out?</h4>
       <h4>How were the waves? (1 = Terrible, 10 = Firing)</h4>
+
       <div>
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((number) => (
+        {ratingScale.map((number) => (
           <button
             key={number}
             type="button"
@@ -73,9 +92,9 @@ function AddSession() {
         ))}
       </div>
 
-      <h4>How was the size?</h4>
+      <h4>How was the size? (1 = Tiny or Too Big, 10 = Perfect Size)</h4>
       <div>
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((number) => (
+        {ratingScale.map((number) => (
           <button
             key={number}
             type="button"
@@ -89,9 +108,10 @@ function AddSession() {
           </button>
         ))}
       </div>
-      <h4>How was the wind?</h4>
+
+      <h4>How was the wind? (1 = Not for you, 10 = Chef&apos;s kiss)</h4>
       <div>
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((number) => (
+        {ratingScale.map((number) => (
           <button
             key={number}
             type="button"
@@ -106,7 +126,22 @@ function AddSession() {
         ))}
       </div>
 
-      <h4>How was the crowd?</h4>
+      <h4>How was the crowd? (1 = Mellow, 10 = Zoo)</h4>
+      <div>
+        {ratingScale.map((number) => (
+          <button
+            key={number}
+            type="button"
+            onClick={() => handleCrowdRatingChange(number)}
+            className="ratingButton"
+            style={{
+              backgroundColor: number <= crowdRating ? 'purple' : 'gray',
+            }}
+          >
+            {number}
+          </button>
+        ))}
+      </div>
 
       <button
         type="button"
