@@ -197,3 +197,8 @@ option {
 
 .popup {
 }
+
+.ratingButton {
+	cursor: pointer;
+	margin: 2px;
+}
