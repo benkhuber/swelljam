@@ -72,13 +72,11 @@ function Home() {
       }
     }
   }
-  console.log(mainBuoyData);
-  console.log(firstWaveHeight);
+
 
   return (
     <div>
       <Header />
-      <p>{firstWaveHeight}</p>
     </div>
   );
 }
