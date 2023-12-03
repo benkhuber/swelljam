@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import DatePicker from 'react-datepicker';
 import Header from '../components/Header';
+import 'react-datepicker/dist/react-datepicker.css';
 
 function AddSession() {
   const [selectedSpot, setSelectedSpot] = useState('Huntington State Beach');
+  const [dateTimeSelect, setDateTimeSelect] = useState(new Date());
   const [waveRating, setWaveRating] = useState(0);
   const [sizeRating, setSizeRating] = useState(0);
   const [windRating, setWindRating] = useState(0);
@@ -12,6 +15,10 @@ function AddSession() {
 
   const handleSpotChange = (e) => {
     setSelectedSpot(e.target.value);
+  };
+
+  const handleDateTimeSelect = (date) => {
+    setDateTimeSelect(date);
   };
 
   const handleWaveRatingChange = (newRating) => {
@@ -65,6 +72,7 @@ function AddSession() {
   console.log(sizeRating);
   console.log(windRating);
   console.log(crowdRating);
+  console.log(dateTimeSelect);
 
   return (
     <div>
@@ -72,7 +80,17 @@ function AddSession() {
       <h2>Add Session</h2>
       <label htmlFor="selectSpotMenu">Select Spot:</label>
       <select id="selectSpotMenu" onChange={handleSpotChange} value={selectedSpot} />
+
       <h4>What day did you paddle out?</h4>
+      <DatePicker
+        selected={dateTimeSelect}
+        onChange={handleDateTimeSelect}
+        showIcon
+        showTimeSelect
+        dateFormat="MM/dd/yyyy h:mm aa"
+        timeCaption="Time"
+        className="datepicker"
+      />
       <h4>When did you paddle out?</h4>
       <h4>How were the waves? (1 = Terrible, 10 = Firing)</h4>
 

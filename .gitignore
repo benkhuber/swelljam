@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 
+swelljam.code-workspace
 
 # Editor directories and files
 .vscode/*

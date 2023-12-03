@@ -202,3 +202,7 @@ option {
 	cursor: pointer;
 	margin: 2px;
 }
+
+.datepicker {
+	width: 500px;
+}
