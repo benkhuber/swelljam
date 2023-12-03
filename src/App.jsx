@@ -3,9 +3,8 @@ import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
+import AddSession from './pages/AddSession';
 import SpotForecast from './pages/SpotForecast';
-import RegionalReport from './pages/RegionalReport';
-import BuoyReport from './pages/BuoyReport';
 import Map from './pages/Map';
 
 function App() {
@@ -13,10 +12,9 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/addsession" element={<AddSession />} />
         <Route path="/surfreport" element={<SpotForecast />} />
-        <Route path="/regionalreport" element={<RegionalReport />} />
         <Route path="/map" element={<Map />} />
-        <Route path="/buoyreport" element={<BuoyReport />} />
       </Routes>
     </Router>
   );
