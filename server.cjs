@@ -1,4 +1,4 @@
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
@@ -79,6 +79,29 @@ app.get('/api/getSessions', async (req, res) => {
   } catch (error) {
     console.error('Error fetching data:', error);
     res.status(500).json({ error: 'Failed to fetch data' });
+  }
+});
+
+app.delete('/api/deleteSession/:id', async (req, res) => {
+  const db = client.db('swelljam');
+  const collection = db.collection('sessions');
+  // eslint-disable-next-line prefer-destructuring
+  const id = req.params.id;
+  console.log('Deleting session with ID:', id);
+
+  try {
+    const objectId = new ObjectId(id);
+    const result = await collection.deleteOne({ _id: objectId });
+    console.log(result);
+
+    if (result.deletedCount > 0) {
+      res.status(200).json({ message: 'Deleted successfully' });
+    } else {
+      res.status(404).json({ message: 'Document not found' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
