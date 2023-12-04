@@ -222,4 +222,5 @@ option {
 	width: 28%;
 	padding: 10px;
 	margin: 20px;
+	justify-content: space-between;
 }

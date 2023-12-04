@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 /* eslint-disable no-restricted-syntax */
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -64,7 +65,6 @@ function Home() {
       sessionContainer.innerHTML = 'No logged sessions.';
     } else if (sessionData && sessionData.length > 6) {
       sessionContainer.innerHTML = '';
-
       for (let i = (sessionData.length - 6); i < sessionData.length; i++) {
         renderSessionCards(sessionData[i]);
       }
@@ -79,7 +79,6 @@ function Home() {
   return (
     <div>
       <Header />
-
       <h3>Sessions</h3>
       <div id="sessionsContainer" />
     </div>
