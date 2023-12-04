@@ -70,15 +70,6 @@ function AddSession() {
   };
 
   useEffect(() => {
-    console.log(sessionData.selectedSpot);
-    console.log(sessionData.dateTimeSelect);
-    console.log(sessionData.waveRating);
-    console.log(sessionData.sizeRating);
-    console.log(sessionData.windRating);
-    console.log(sessionData.crowdRating);
-  }, [sessionData.selectedSpot]);
-
-  useEffect(() => {
     const selectElement = document.getElementById('selectSpotMenu');
     selectElement.innerHTML = '';
     const surfSpots = [

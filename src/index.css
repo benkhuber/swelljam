@@ -206,3 +206,20 @@ option {
 .datepicker {
 	width: 318px;
 }
+
+#sessionsContainer {
+	display: flex;
+	flex-wrap: wrap;
+	border-top: solid 2px white;
+	border-bottom: solid 2px white;
+}
+
+.sessionCard {
+	display: flex;
+	flex-direction: column;
+	border: solid 2px red;
+	height: 300px;
+	width: 28%;
+	padding: 10px;
+	margin: 20px;
+}
