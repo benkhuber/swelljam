@@ -38,6 +38,10 @@ function Home() {
     const sessionCard = document.createElement('div');
     const spotNameCard = document.createElement('div');
     const dateTimeCard = document.createElement('div');
+    const waveRatingCard = document.createElement('div');
+    const sizeRatingCard = document.createElement('div');
+    const windRatingCard = document.createElement('div');
+    const crowdRatingCard = document.createElement('div');
     const deleteSessionButton = document.createElement('button');
 
     sessionCard.className = 'sessionCard';
@@ -50,11 +54,27 @@ function Home() {
     spotNameCard.value = sessionDataInput.selectedSpot;
     spotNameCard.textContent = `Spot: ${sessionDataInput.selectedSpot}`;
 
+    waveRatingCard.value = sessionDataInput.waveRating;
+    waveRatingCard.textContent = `Wave Rating: ${sessionDataInput.waveRating}`;
+
+    sizeRatingCard.value = sessionDataInput.sizeRating;
+    sizeRatingCard.textContent = `Size Rating: ${sessionDataInput.sizeRating}`;
+
+    windRatingCard.value = sessionDataInput.windRating;
+    windRatingCard.textContent = `Wind Rating: ${sessionDataInput.windRating}`;
+
+    crowdRatingCard.value = sessionDataInput.crowdRating;
+    crowdRatingCard.textContent = `Crowd Rating: ${sessionDataInput.crowdRating}`;
+
     deleteSessionButton.textContent = 'Delete Session';
     deleteSessionButton.addEventListener('click', deleteSession);
 
     sessionCard.appendChild(dateTimeCard);
     sessionCard.appendChild(spotNameCard);
+    sessionCard.appendChild(waveRatingCard);
+    sessionCard.appendChild(sizeRatingCard);
+    sessionCard.appendChild(windRatingCard);
+    sessionCard.appendChild(crowdRatingCard);
     sessionCard.appendChild(deleteSessionButton);
 
     sessionContainer.appendChild(sessionCard);
