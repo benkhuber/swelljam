@@ -20,8 +20,6 @@ function Home() {
     fetchData();
   }, []);
 
-  const sessionContainer = document.getElementById('sessionsContainer');
-
   const deleteSession = async (e) => {
     const idToDelete = e.target.parentElement.id;
     console.log(idToDelete);
@@ -34,6 +32,26 @@ function Home() {
     }
   };
 
+  const parseDateTimeToPST = (dateTimeInput) => {
+    const dateTimeUTC = new Date(dateTimeInput);
+    const dateTimePST = dateTimeUTC.toLocaleString(
+      'en-US',
+      {
+        timezone: 'America/Los_Angeles',
+        month: 'numeric',
+        day: 'numeric',
+        year: 'numeric',
+        weekday: 'long',
+        hour: 'numeric',
+        minute: 'numeric',
+      },
+    );
+
+    return dateTimePST;
+  };
+
+  const sessionContainer = document.getElementById('sessionsContainer');
+
   const renderSessionCards = (sessionDataInput) => {
     const sessionCard = document.createElement('div');
     const spotNameCard = document.createElement('div');
@@ -44,12 +62,16 @@ function Home() {
     const crowdRatingCard = document.createElement('div');
     const deleteSessionButton = document.createElement('button');
 
+    const dateTimePST = parseDateTimeToPST(sessionDataInput.dateTimeSelect);
+
+    console.log(dateTimePST);
+
     sessionCard.className = 'sessionCard';
     // eslint-disable-next-line no-underscore-dangle
     sessionCard.id = sessionDataInput._id;
 
-    dateTimeCard.value = sessionDataInput.dateTimeSelect;
-    dateTimeCard.textContent = sessionDataInput.dateTimeSelect;
+    dateTimeCard.value = dateTimePST;
+    dateTimeCard.textContent = dateTimePST;
 
     spotNameCard.value = sessionDataInput.selectedSpot;
     spotNameCard.textContent = `Spot: ${sessionDataInput.selectedSpot}`;
@@ -99,7 +121,7 @@ function Home() {
   return (
     <div>
       <Header />
-      <h3>Sessions</h3>
+      <h3>Recent Sessions</h3>
       <div id="sessionsContainer" />
     </div>
   );
