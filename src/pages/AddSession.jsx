@@ -25,9 +25,17 @@ function AddSession() {
 
   const parseBuoyData = (userDate) => {
     const dateObject = new Date(userDate);
-    console.log(dateObject);
+    const utcDateString = dateObject.toISOString();
+    const utcDate = utcDateString.slice(0, 10);
+    const utcTime = utcDateString.slice(11, 16);
 
     const lines = buoyData.toString().split('\n');
+    let closestLine = null;
+    let closestTimeDifference = Infinity;
+    let swellHeight = 0;
+    let swellDirection = 0;
+    let swellPeriod = 0;
+
     for (const line of lines) {
       const values = line.trim().split(/\s+/);
 
@@ -36,19 +44,44 @@ function AddSession() {
         const month = values[1];
         const day = values[2];
         const hour = values[3];
+        const minute = values[4];
         const waveHeight = values[8];
         const dominantPeriod = values[9];
         const meanWaveDirection = values[11];
 
-        console.log(year + month + day);
-        if (year == dateObject.getFullYear()) {
-          if (month == (dateObject.getMonth() + 1)) {
-            console.log(day);
-            console.log(dateObject.getDate());
+        if (`${year}-${month}-${day}` == utcDate) {
+          const lineTime = `${hour}:${minute}`;
+
+          const timeDifference = Math.abs(
+            Date.parse(`2000-01-01T${lineTime}:00.000Z`) - Date.parse(`2000-01-01T${utcTime}:00.000Z`),
+          );
+
+          if (timeDifference < closestTimeDifference) {
+            closestTimeDifference = timeDifference;
+            closestLine = line;
+            swellHeight = waveHeight;
+            swellDirection = meanWaveDirection;
+            swellPeriod = dominantPeriod;
           }
         }
       }
     }
+
+    console.log(utcDateString);
+    if (closestLine) {
+      console.log(closestLine);
+      console.log(swellHeight);
+      console.log(swellDirection);
+      console.log(swellPeriod);
+
+      setSessionData((prevSessionData) => ({
+        ...prevSessionData,
+        primarySwellHeight: swellHeight,
+        primarySwellDirection: swellDirection,
+        primarySwellPeriod: swellPeriod,
+      }));
+    }
+    console.log(sessionData);
   };
 
   useEffect(() => {
