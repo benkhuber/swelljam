@@ -36,7 +36,7 @@ function AddSession() {
     let swellDirection = 0;
     let swellPeriod = 0;
 
-    for (const line of lines) {
+    lines.forEach((line) => {
       const values = line.trim().split(/\s+/);
 
       if (values.length === 19) {
@@ -65,7 +65,7 @@ function AddSession() {
           }
         }
       }
-    }
+    });
 
     console.log(utcDateString);
     if (closestLine) {

@@ -60,6 +60,7 @@ function Home() {
     const sizeRatingCard = document.createElement('div');
     const windRatingCard = document.createElement('div');
     const crowdRatingCard = document.createElement('div');
+    const swellHeightCard = document.createElement('div');
     const deleteSessionButton = document.createElement('button');
 
     const dateTimePST = parseDateTimeToPST(sessionDataInput.dateTimeSelect);
@@ -88,6 +89,9 @@ function Home() {
     crowdRatingCard.value = sessionDataInput.crowdRating;
     crowdRatingCard.textContent = `Crowd Rating: ${sessionDataInput.crowdRating}`;
 
+    swellHeightCard.value = sessionDataInput.primarySwellHeight;
+    swellHeightCard.textContent = `${sessionDataInput.primarySwellHeight} m at ${sessionDataInput.primarySwellPeriod} seconds from ${sessionDataInput.primarySwellDirection} degrees.`;
+
     deleteSessionButton.textContent = 'Delete Session';
     deleteSessionButton.addEventListener('click', deleteSession);
 
@@ -97,6 +101,7 @@ function Home() {
     sessionCard.appendChild(sizeRatingCard);
     sessionCard.appendChild(windRatingCard);
     sessionCard.appendChild(crowdRatingCard);
+    sessionCard.appendChild(swellHeightCard);
     sessionCard.appendChild(deleteSessionButton);
 
     sessionContainer.appendChild(sessionCard);
