@@ -9,14 +9,68 @@ import 'react-datepicker/dist/react-datepicker.css';
 function AddSession() {
   const [sessionData, setSessionData] = useState({
     selectedSpot: 'Huntington State Beach',
+    primaryBuoyID: '46253',
+    primarySwellHeight: 0,
+    primarySwellDirection: 0,
+    primarySwellPeriod: 0,
     dateTimeSelect: new Date(),
     waveRating: 0,
     sizeRating: 0,
     windRating: 0,
     crowdRating: 0,
   });
+  const [buoyData, setBuoyData] = useState([]);
 
   const ratingScale = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+  const parseBuoyData = (userDate) => {
+    const dateObject = new Date(userDate);
+    console.log(dateObject);
+
+    const lines = buoyData.toString().split('\n');
+    for (const line of lines) {
+      const values = line.trim().split(/\s+/);
+
+      if (values.length === 19) {
+        const year = values[0];
+        const month = values[1];
+        const day = values[2];
+        const hour = values[3];
+        const waveHeight = values[8];
+        const dominantPeriod = values[9];
+        const meanWaveDirection = values[11];
+
+        console.log(year + month + day);
+        if (year == dateObject.getFullYear()) {
+          if (month == (dateObject.getMonth() + 1)) {
+            console.log(day);
+            console.log(dateObject.getDate());
+          }
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    parseBuoyData(sessionData.dateTimeSelect);
+  }, [buoyData, sessionData.dateTimeSelect]);
+
+  const fetchSwellData = async () => {
+    const apiUrl = `http://localhost:3001/api/buoydata/realtime/${sessionData.primaryBuoyID}`;
+    try {
+      const response = await fetch(apiUrl);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const textData = await response.text();
+      setBuoyData(textData);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  fetchSwellData();
 
   const handleSpotChange = (e) => {
     setSessionData((prevSessionData) => ({

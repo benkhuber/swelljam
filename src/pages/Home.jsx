@@ -116,12 +116,13 @@ function Home() {
         renderSessionCards(sessionData[i]);
       }
     }
+    console.log(sessionData);
   }, [sessionData]);
 
   return (
     <div>
       <Header />
-      <h3>Recent Sessions</h3>
+      <h3>Your Recent Sessions</h3>
       <div id="sessionsContainer" />
     </div>
   );
