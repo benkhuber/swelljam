@@ -52,6 +52,16 @@ function Home() {
 
   const sessionContainer = document.getElementById('sessionsContainer');
 
+  const addSessionListeners = () => {
+    const cards = document.getElementsByClassName('sessionCard');
+
+    for (const card of cards) {
+      card.addEventListener('click', (e) => {
+        console.log(e.currentTarget.id);
+      });
+    }
+  };
+
   const renderSessionCards = (sessionDataInput) => {
     const sessionCard = document.createElement('div');
     const spotNameCard = document.createElement('div');
@@ -64,8 +74,6 @@ function Home() {
     const deleteSessionButton = document.createElement('button');
 
     const dateTimePST = parseDateTimeToPST(sessionDataInput.dateTimeSelect);
-
-    console.log(dateTimePST);
 
     sessionCard.className = 'sessionCard';
     // eslint-disable-next-line no-underscore-dangle
@@ -121,7 +129,7 @@ function Home() {
         renderSessionCards(sessionData[i]);
       }
     }
-    console.log(sessionData);
+    addSessionListeners();
   }, [sessionData]);
 
   return (
