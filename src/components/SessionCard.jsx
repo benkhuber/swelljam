@@ -28,8 +28,8 @@ function SessionCard({ session, onDelete }) {
       <div>Size Rating: {session.sizeRating}</div>
       <div>Wind Rating: {session.windRating}</div>
       <div>Crowd Rating: {session.CrowdRating}</div>
-      <div>{session.primarySwellHeight} m at {session.primarySwellPeriod}
-        seconds from {session.primarySwellDirection}
+      <div>{session.primarySwellHeight} m at {session.primarySwellPeriod} seconds
+        from {session.primarySwellDirection} degrees
       </div>
       <button type="button" onClick={() => onDelete(session._id)}>Delete Session</button>
     </div>
