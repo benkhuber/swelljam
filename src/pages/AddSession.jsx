@@ -49,7 +49,7 @@ function AddSession() {
         const dominantPeriod = values[9];
         const meanWaveDirection = values[11];
 
-        if (`${year}-${month}-${day}` == utcDate) {
+        if (`${year}-${month}-${day}` === utcDate) {
           const lineTime = `${hour}:${minute}`;
 
           const timeDifference = Math.abs(

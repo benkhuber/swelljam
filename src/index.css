@@ -217,7 +217,8 @@ option {
 .sessionCard {
 	display: flex;
 	flex-direction: column;
-	border: solid 2px red;
+	cursor: pointer;
+	border: solid 2px white;
 	height: 300px;
 	width: 28%;
 	padding: 10px;

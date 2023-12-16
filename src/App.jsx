@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import AddSession from './pages/AddSession';
 import SpotForecast from './pages/SpotForecast';
 import Map from './pages/Map';
+import SessionDetail from './pages/SessionDetail';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/addsession" element={<AddSession />} />
         <Route path="/surfreport" element={<SpotForecast />} />
         <Route path="/map" element={<Map />} />
+        <Route path="/session/:sessionId" element={<SessionDetail />} />
       </Routes>
     </Router>
   );

@@ -1,6 +1,14 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function SessionCard({ session, onDelete }) {
+  const navigate = useNavigate();
+
+  const handleCardClick = () => {
+    console.log(session._id);
+    navigate(`/session/${session._id}`, { state: { session } });
+  };
+
   const parseDateTimeToPST = (dateTimeInput) => {
     const dateTimeUTC = new Date(dateTimeInput);
     const dateTimePST = dateTimeUTC.toLocaleString(
@@ -20,8 +28,13 @@ function SessionCard({ session, onDelete }) {
 
   const dateTimePST = parseDateTimeToPST(session.dateTimeSelect);
 
+  const handleDeleteClick = (e) => {
+    e.stopPropagation();
+    onDelete(session._id);
+  };
+
   return (
-    <div className="sessionCard" id={session._id}>
+    <div className="sessionCard" id={session._id} onClick={handleCardClick}>
       <div>{dateTimePST}</div>
       <div>Spot: {session.selectedSpot}</div>
       <div>Wave Rating: {session.waveRating}</div>
@@ -31,7 +44,7 @@ function SessionCard({ session, onDelete }) {
       <div>{session.primarySwellHeight} m at {session.primarySwellPeriod} seconds
         from {session.primarySwellDirection} degrees
       </div>
-      <button type="button" onClick={() => onDelete(session._id)}>Delete Session</button>
+      <button type="button" onClick={handleDeleteClick}>Delete Session</button>
     </div>
   );
 }
