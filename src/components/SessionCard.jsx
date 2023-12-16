@@ -40,7 +40,7 @@ function SessionCard({ session, onDelete }) {
       <div>Wave Rating: {session.waveRating}</div>
       <div>Size Rating: {session.sizeRating}</div>
       <div>Wind Rating: {session.windRating}</div>
-      <div>Crowd Rating: {session.CrowdRating}</div>
+      <div>Crowd Rating: {session.crowdRating}</div>
       <div>{session.primarySwellHeight} m at {session.primarySwellPeriod} seconds
         from {session.primarySwellDirection} degrees
       </div>

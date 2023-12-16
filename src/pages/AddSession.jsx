@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import DatePicker from 'react-datepicker';
 import axios from 'axios';
@@ -10,18 +11,20 @@ function AddSession() {
   const [sessionData, setSessionData] = useState({
     selectedSpot: 'Huntington State Beach',
     primaryBuoyID: '46253',
-    primarySwellHeight: 0,
-    primarySwellDirection: 0,
-    primarySwellPeriod: 0,
     dateTimeSelect: new Date(),
     waveRating: 0,
     sizeRating: 0,
     windRating: 0,
     crowdRating: 0,
+    primarySwellHeight: 0,
+    primarySwellDirection: 0,
+    primarySwellPeriod: 0,
+    averageSwellPeriod: 0,
+    buoyWaterTemperature: 0,
   });
   const [buoyData, setBuoyData] = useState([]);
-
   const ratingScale = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const navigate = useNavigate();
 
   const parseBuoyData = (userDate) => {
     const dateObject = new Date(userDate);
@@ -35,6 +38,8 @@ function AddSession() {
     let swellHeight = 0;
     let swellDirection = 0;
     let swellPeriod = 0;
+    let avgPeriod = 0;
+    let waterTemp = 0;
 
     lines.forEach((line) => {
       const values = line.trim().split(/\s+/);
@@ -47,7 +52,9 @@ function AddSession() {
         const minute = values[4];
         const waveHeight = values[8];
         const dominantPeriod = values[9];
+        const averagePeriod = values[10];
         const meanWaveDirection = values[11];
+        const waterTemperature = values[14];
 
         if (`${year}-${month}-${day}` === utcDate) {
           const lineTime = `${hour}:${minute}`;
@@ -62,12 +69,13 @@ function AddSession() {
             swellHeight = waveHeight;
             swellDirection = meanWaveDirection;
             swellPeriod = dominantPeriod;
+            avgPeriod = averagePeriod;
+            waterTemp = waterTemperature;
           }
         }
       }
     });
 
-    console.log(utcDateString);
     if (closestLine) {
       console.log(closestLine);
       console.log(swellHeight);
@@ -79,6 +87,9 @@ function AddSession() {
         primarySwellHeight: swellHeight,
         primarySwellDirection: swellDirection,
         primarySwellPeriod: swellPeriod,
+        averageSwellPeriod: avgPeriod,
+        buoyWaterTemperature: waterTemp,
+
       }));
     }
     console.log(sessionData);
@@ -151,6 +162,7 @@ function AddSession() {
     try {
       const response = await axios.post('http://localhost:3001/api/addSession', sessionData);
       console.log('Data added successfully:', response.data.message);
+      navigate('/');
     } catch (error) {
       console.error('Error adding data:', error);
     }
@@ -285,7 +297,7 @@ function AddSession() {
         </div>
 
         <button
-          type="submit"
+          type="button"
           onClick={handleSubmitSession}
         >Add Data
         </button>
