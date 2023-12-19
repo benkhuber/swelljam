@@ -8,6 +8,7 @@ import AddSession from './pages/AddSession';
 import SpotForecast from './pages/SpotForecast';
 import Map from './pages/Map';
 import SessionDetail from './pages/SessionDetail';
+import EditSession from './pages/EditSession';
 
 const deleteSession = async (sessionId) => {
   try {
@@ -27,6 +28,7 @@ function App() {
         <Route path="/surfreport" element={<SpotForecast />} />
         <Route path="/map" element={<Map />} />
         <Route path="/session/:sessionId" element={<SessionDetail onDelete={deleteSession} />} />
+        <Route path="/editsession/:sessionId" element={<EditSession />} />
       </Routes>
     </Router>
   );

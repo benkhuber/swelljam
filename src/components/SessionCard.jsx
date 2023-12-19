@@ -33,6 +33,11 @@ function SessionCard({ session, onDelete }) {
     onDelete(session._id);
   };
 
+  const handleEditClick = (e) => {
+    e.stopPropagation();
+    navigate(`/editsession/${session._id}`, { state: { session } });
+  };
+
   return (
     <div className="sessionCard" id={session._id} onClick={handleCardClick}>
       <div>{dateTimePST}</div>
@@ -45,6 +50,7 @@ function SessionCard({ session, onDelete }) {
         from {session.primarySwellDirection} degrees
       </div>
       <button type="button" onClick={handleDeleteClick}>Delete Session</button>
+      <button type="button" onClick={handleEditClick}>Edit Session</button>
     </div>
   );
 }

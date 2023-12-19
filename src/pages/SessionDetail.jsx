@@ -16,6 +16,11 @@ function SessionDetail({ onDelete }) {
     }
   };
 
+  const handleEditClick = (e) => {
+    e.stopPropagation();
+    navigate(`/editsession/${session._id}`, { state: { session } });
+  };
+
   return (
     <div><Header />
 
@@ -32,6 +37,7 @@ function SessionDetail({ onDelete }) {
       <div>Water Temperature: {session.buoyWaterTemperature}</div>
       <div>Average Swell Period: {session.averageSwellPeriod} s</div>
       <button type="button" onClick={handleDeleteClick}>Delete Session</button>
+      <button type="button" onClick={handleEditClick}>Edit Session</button>
     </div>
   );
 }
