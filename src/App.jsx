@@ -28,7 +28,7 @@ function App() {
         <Route path="/surfreport" element={<SpotForecast />} />
         <Route path="/map" element={<Map />} />
         <Route path="/session/:sessionId" element={<SessionDetail onDelete={deleteSession} />} />
-        <Route path="/editsession/:sessionId" element={<EditSession />} />
+        <Route path="/editsession/:sessionId" element={<EditSession onDelete={deleteSession} />} />
       </Routes>
     </Router>
   );
