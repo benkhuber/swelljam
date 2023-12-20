@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import { parseISO } from 'date-fns';
+import axios from 'axios';
 import Header from '../components/Header';
 
 function EditSession({ onDelete }) {
@@ -22,8 +23,119 @@ function EditSession({ onDelete }) {
     buoyWaterTemperature: session.buoyWaterTemperature,
   });
 
+  const [buoyData, setBuoyData] = useState([]);
+
   const navigate = useNavigate();
   const ratingScale = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+  const surfSpots = [
+    {
+      spotName: 'Huntington State Beach',
+      mainBuoyStationId: '46253',
+    },
+    {
+      spotName: 'Newport Upper Jetties',
+      mainBuoyStationId: '46253',
+    },
+    {
+      spotName: 'T-Street',
+      mainBuoyStationId: '46253',
+    },
+    {
+      spotName: 'Upper Trestles',
+      mainBuoyStationId: '46253',
+    },
+  ];
+
+  const parseBuoyData = (userDate) => {
+    const dateObject = new Date(userDate);
+    const utcDateString = dateObject.toISOString();
+    const utcDate = utcDateString.slice(0, 10);
+    const utcTime = utcDateString.slice(11, 16);
+
+    const lines = buoyData.toString().split('\n');
+    let closestLine = null;
+    let closestTimeDifference = Infinity;
+    let swellHeight = 0;
+    let swellDirection = 0;
+    let swellPeriod = 0;
+    let avgPeriod = 0;
+    let waterTemp = 0;
+
+    lines.forEach((line) => {
+      const values = line.trim().split(/\s+/);
+
+      if (values.length === 19) {
+        const year = values[0];
+        const month = values[1];
+        const day = values[2];
+        const hour = values[3];
+        const minute = values[4];
+        const waveHeight = values[8];
+        const dominantPeriod = values[9];
+        const averagePeriod = values[10];
+        const meanWaveDirection = values[11];
+        const waterTemperature = values[14];
+
+        if (`${year}-${month}-${day}` === utcDate) {
+          const lineTime = `${hour}:${minute}`;
+
+          const timeDifference = Math.abs(
+            Date.parse(`2000-01-01T${lineTime}:00.000Z`) - Date.parse(`2000-01-01T${utcTime}:00.000Z`),
+          );
+
+          if (timeDifference < closestTimeDifference) {
+            closestTimeDifference = timeDifference;
+            closestLine = line;
+            swellHeight = waveHeight;
+            swellDirection = meanWaveDirection;
+            swellPeriod = dominantPeriod;
+            avgPeriod = averagePeriod;
+            waterTemp = waterTemperature;
+          }
+        }
+      }
+    });
+
+    if (closestLine) {
+      console.log(closestLine);
+      console.log(swellHeight);
+      console.log(swellDirection);
+      console.log(swellPeriod);
+
+      setSessionData((prevSessionData) => ({
+        ...prevSessionData,
+        primarySwellHeight: swellHeight,
+        primarySwellDirection: swellDirection,
+        primarySwellPeriod: swellPeriod,
+        averageSwellPeriod: avgPeriod,
+        buoyWaterTemperature: waterTemp,
+
+      }));
+    }
+    console.log(sessionData);
+  };
+
+  useEffect(() => {
+    parseBuoyData(sessionData.dateTimeSelect);
+  }, [buoyData, sessionData.dateTimeSelect]);
+
+  const fetchSwellData = async () => {
+    const apiUrl = `http://localhost:3001/api/buoydata/realtime/${sessionData.primaryBuoyID}`;
+    try {
+      const response = await fetch(apiUrl);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const textData = await response.text();
+      setBuoyData(textData);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  fetchSwellData();
 
   const handleSpotChange = (e) => {
     setSessionData((prevSessionData) => ({
@@ -69,28 +181,20 @@ function EditSession({ onDelete }) {
 
   console.log(sessionData);
 
-  const handleSubmitSession = () => {
-    console.log('YES');
+  const handleSubmitSession = async () => {
+    try {
+      console.log(session._id);
+      console.log(sessionData);
+      const response = await axios.put(
+        `http://localhost:3001/api/updateSession/${session._id}`,
+        sessionData,
+      );
+      console.log('Data updated successfully:', response.data);
+      navigate('/');
+    } catch (error) {
+      console.error('Error updating data:', error);
+    }
   };
-
-  const surfSpots = [
-    {
-      spotName: 'Huntington State Beach',
-      mainBuoyStationId: '46253',
-    },
-    {
-      spotName: 'Newport Upper Jetties',
-      mainBuoyStationId: '46253',
-    },
-    {
-      spotName: 'T-Street',
-      mainBuoyStationId: '46253',
-    },
-    {
-      spotName: 'Upper Trestles',
-      mainBuoyStationId: '46253',
-    },
-  ];
 
   const handleDeleteClick = async () => {
     try {

@@ -82,6 +82,31 @@ app.get('/api/getSessions', async (req, res) => {
   }
 });
 
+app.put('/api/updateSession/:sessionId', async (req, res) => {
+  const { sessionId } = req.params;
+  const updatedData = req.body;
+
+  console.log(updatedData);
+
+  try {
+    const db = client.db('swelljam');
+    const collection = db.collection('sessions');
+    const result = await collection.updateOne(
+      { _id: new ObjectId(sessionId) }, // Assuming sessionId is a valid ObjectId
+      { $set: updatedData },
+    );
+
+    if (result.matchedCount === 0) {
+      return res.status(404).json({ error: 'Session not found' });
+    }
+
+    res.json({ message: 'Session updated successfully' });
+  } catch (error) {
+    console.error('Error updating session:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 app.delete('/api/deleteSession/:id', async (req, res) => {
   const db = client.db('swelljam');
   const collection = db.collection('sessions');
