@@ -12,10 +12,10 @@ function About() {
         wave of memories.
       </p>
       <h3>Ride. Record. Remember.</h3>
-      <p>&emsp;&emsp;At SwellJam, we understand that surfing is more than just a sport; it&
-        apos;s a way of life. Our platform is designed for surfers of all levels to chronicle
-        their sessions and create a rich tapestry of their surfing experiences. Whether you&
-        apos;re a seasoned pro or a beginner catching your first waves, this is your digital
+      <p>&emsp;&emsp;At SwellJam, we understand that surfing is more than just a sport;
+        it&apos;s a way of life. Our platform is designed for surfers of all levels to chronicle
+        their sessions and create a rich tapestry of their surfing experiences. Whether
+        you&apos;re a seasoned pro or a beginner catching your first waves, this is your digital
         sanctuary to relive the magic of each surf session.
       </p>
       <h3>Real-Time Data Integration</h3>
