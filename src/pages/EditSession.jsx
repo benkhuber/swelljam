@@ -7,7 +7,6 @@ import Header from '../components/Header';
 
 function EditSession({ onDelete }) {
   const { state: { session } } = useLocation();
-
   const [sessionData, setSessionData] = useState({
     selectedSpot: session.selectedSpot,
     primaryBuoyID: session.primaryBuoyID,
@@ -22,7 +21,6 @@ function EditSession({ onDelete }) {
     averageSwellPeriod: session.averageSwellPeriod,
     buoyWaterTemperature: session.buoyWaterTemperature,
   });
-
   const [buoyData, setBuoyData] = useState([]);
 
   const navigate = useNavigate();

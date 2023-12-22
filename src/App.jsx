@@ -9,6 +9,7 @@ import SpotForecast from './pages/SpotForecast';
 import Map from './pages/Map';
 import SessionDetail from './pages/SessionDetail';
 import EditSession from './pages/EditSession';
+import About from './pages/About';
 
 const deleteSession = async (sessionId) => {
   try {
@@ -24,6 +25,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
         <Route path="/addsession" element={<AddSession />} />
         <Route path="/surfreport" element={<SpotForecast />} />
         <Route path="/map" element={<Map />} />
