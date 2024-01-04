@@ -73,6 +73,7 @@ function AddSession() {
             waterTemp = waterTemperature;
           }
         }
+        console.log(closestLine);
       }
     });
 

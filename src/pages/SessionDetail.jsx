@@ -21,6 +21,8 @@ function SessionDetail({ onDelete }) {
     navigate(`/editsession/${session._id}`, { state: { session } });
   };
 
+  const convertTempToFahrenheit = (temp) => Math.round((temp * (9 / 5)) + 32, 0);
+
   return (
     <div><Header />
 
@@ -34,7 +36,7 @@ function SessionDetail({ onDelete }) {
       <div>{session.primarySwellHeight} m at {session.primarySwellPeriod} seconds
         from {session.primarySwellDirection} degrees
       </div>
-      <div>Water Temperature: {session.buoyWaterTemperature}</div>
+      <div>Water Temperature: {convertTempToFahrenheit(session.buoyWaterTemperature)} F</div>
       <div>Average Swell Period: {session.averageSwellPeriod} s</div>
       <button type="button" onClick={handleDeleteClick}>Delete Session</button>
       <button type="button" onClick={handleEditClick}>Edit Session</button>
