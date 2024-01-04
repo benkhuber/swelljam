@@ -9,7 +9,7 @@ function SessionDetail({ onDelete }) {
 
   const handleDeleteClick = async () => {
     try {
-      await onDelete(session._id);
+      await onDelete(sessionId);
       navigate('/');
     } catch (error) {
       console.error('Error deleting session:', error);
@@ -18,16 +18,33 @@ function SessionDetail({ onDelete }) {
 
   const handleEditClick = (e) => {
     e.stopPropagation();
-    navigate(`/editsession/${session._id}`, { state: { session } });
+    navigate(`/editsession/${sessionId}`, { state: { session } });
   };
 
   const convertTempToFahrenheit = (temp) => Math.round((temp * (9 / 5)) + 32, 0);
+
+  const parseDateTimeToPST = (dateTimeInput) => {
+    const dateTimeUTC = new Date(dateTimeInput);
+    const dateTimePST = dateTimeUTC.toLocaleString(
+      'en-US',
+      {
+        timezone: 'America/Los_Angeles',
+        month: 'numeric',
+        day: 'numeric',
+        year: 'numeric',
+        weekday: 'long',
+        hour: 'numeric',
+        minute: 'numeric',
+      },
+    );
+    return dateTimePST;
+  };
 
   return (
     <div><Header />
 
       <p>Session Details</p>
-      <div>{session.dateTimeSelect}</div>
+      <div>{parseDateTimeToPST(session.dateTimeSelect)}</div>
       <div>Spot: {session.selectedSpot}</div>
       <div>Wave Rating: {session.waveRating}</div>
       <div>Size Rating: {session.sizeRating}</div>

@@ -92,6 +92,9 @@ function AddSession() {
         buoyWaterTemperature: waterTemp,
 
       }));
+    } else {
+      console.log(closestLine);
+      console.log('NO CLOSEST LINE');
     }
     console.log(sessionData);
   };

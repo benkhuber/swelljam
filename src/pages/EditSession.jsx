@@ -110,8 +110,9 @@ function EditSession({ onDelete }) {
         buoyWaterTemperature: waterTemp,
 
       }));
+    } else {
+      console.log('NO CLOSEST LINE');
     }
-    console.log(sessionData);
   };
 
   useEffect(() => {
