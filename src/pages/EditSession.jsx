@@ -96,11 +96,6 @@ function EditSession({ onDelete }) {
     });
 
     if (closestLine) {
-      console.log(closestLine);
-      console.log(swellHeight);
-      console.log(swellDirection);
-      console.log(swellPeriod);
-
       setSessionData((prevSessionData) => ({
         ...prevSessionData,
         primarySwellHeight: swellHeight,

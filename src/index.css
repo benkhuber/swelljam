@@ -234,3 +234,39 @@ option {
 	margin: 20px;
 	justify-content: space-between;
 }
+
+.sessionDetails {
+	display: flex;
+	flex-direction: column;
+}
+
+.buttonContainer {
+	display: flex;
+	padding: 1rem;
+}
+
+.sessionDetailsDate {
+	font-size: 1.5rem;
+}
+
+.sessionDetailsSpot {
+	padding: 1rem;
+	font-size: 3rem;
+}
+
+.sessionDetailsRating {
+	padding: 0.5rem 1rem;
+	font-size: 2rem;
+}
+
+.highRating {
+	color: rgb(0, 189, 0); /* Set your desired color for high ratings */
+}
+
+.mediumRating {
+	color: rgb(255, 194, 82); /* Set your desired color for medium ratings */
+}
+
+.lowRating {
+	color: rgb(255, 79, 79); /* Set your desired color for low ratings */
+}

@@ -40,23 +40,35 @@ function SessionDetail({ onDelete }) {
     return dateTimePST;
   };
 
+  const getColorClass = (rating) => {
+    if (rating >= 8) {
+      return 'highRating';
+    } if (rating >= 5) {
+      return 'mediumRating';
+    }
+    return 'lowRating';
+  };
+
   return (
     <div><Header />
-
-      <p>Session Details</p>
-      <div>{parseDateTimeToPST(session.dateTimeSelect)}</div>
-      <div>Spot: {session.selectedSpot}</div>
-      <div>Wave Rating: {session.waveRating}</div>
-      <div>Size Rating: {session.sizeRating}</div>
-      <div>Wind Rating: {session.windRating}</div>
-      <div>Crowd Rating: {session.crowdRating}</div>
-      <div>{session.primarySwellHeight} m at {session.primarySwellPeriod} seconds
-        from {session.primarySwellDirection} degrees
+      <h2>Session Details</h2>
+      <div className="sessionDetails">
+        <div className="sessionDetailsDate">{parseDateTimeToPST(session.dateTimeSelect)}</div>
+        <div className="sessionDetailsSpot">{session.selectedSpot}</div>
+        <div className={`sessionDetailsRating ${getColorClass(session.waveRating)}`}>Wave Rating: {session.waveRating}</div>
+        <div className={`sessionDetailsRating ${getColorClass(session.sizeRating)}`}>Size Rating: {session.sizeRating}</div>
+        <div className={`sessionDetailsRating ${getColorClass(session.windRating)}`}>Wind Rating: {session.windRating}</div>
+        <div className={`sessionDetailsRating ${getColorClass(session.crowdRating)}`}>Crowd Rating: {session.crowdRating}</div>
+        <div>{session.primarySwellHeight} m at {session.primarySwellPeriod} seconds
+          from {session.primarySwellDirection} degrees
+        </div>
+        <div>Water Temperature: {convertTempToFahrenheit(session.buoyWaterTemperature)} F</div>
+        <div>Average Swell Period: {session.averageSwellPeriod} s</div>
+        <div className="buttonContainer">
+          <button type="button" onClick={handleDeleteClick}>Delete Session</button>
+          <button type="button" onClick={handleEditClick}>Edit Session</button>
+        </div>
       </div>
-      <div>Water Temperature: {convertTempToFahrenheit(session.buoyWaterTemperature)} F</div>
-      <div>Average Swell Period: {session.averageSwellPeriod} s</div>
-      <button type="button" onClick={handleDeleteClick}>Delete Session</button>
-      <button type="button" onClick={handleEditClick}>Edit Session</button>
     </div>
   );
 }

@@ -73,16 +73,10 @@ function AddSession() {
             waterTemp = waterTemperature;
           }
         }
-        console.log(closestLine);
       }
     });
 
     if (closestLine) {
-      console.log(closestLine);
-      console.log(swellHeight);
-      console.log(swellDirection);
-      console.log(swellPeriod);
-
       setSessionData((prevSessionData) => ({
         ...prevSessionData,
         primarySwellHeight: swellHeight,
@@ -92,11 +86,7 @@ function AddSession() {
         buoyWaterTemperature: waterTemp,
 
       }));
-    } else {
-      console.log(closestLine);
-      console.log('NO CLOSEST LINE');
     }
-    console.log(sessionData);
   };
 
   useEffect(() => {

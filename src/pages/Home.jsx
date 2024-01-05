@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Header from '../components/Header';
 import SessionCard from '../components/SessionCard';
+import RegionalForecast from '../components/RegionalForecast';
 
 function Home() {
   const [sessionData, setSessionData] = useState();
@@ -37,6 +38,8 @@ function Home() {
   return (
     <div>
       <Header />
+      <h3>Southern California Conditions</h3>
+      <RegionalForecast />
       <h3>Your Recent Sessions</h3>
       <div id="sessionsContainer">
         {sessionData && sessionData.length > 0 ? (
