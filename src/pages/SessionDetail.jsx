@@ -40,7 +40,7 @@ function SessionDetail({ onDelete }) {
     return dateTimePST;
   };
 
-  const getColorClass = (rating) => {
+  const getRatingColorClass = (rating) => {
     if (rating >= 8) {
       return 'highRating';
     } if (rating >= 5) {
@@ -55,15 +55,15 @@ function SessionDetail({ onDelete }) {
       <div className="sessionDetails">
         <div className="sessionDetailsDate">{parseDateTimeToPST(session.dateTimeSelect)}</div>
         <div className="sessionDetailsSpot">{session.selectedSpot}</div>
-        <div className={`sessionDetailsRating ${getColorClass(session.waveRating)}`}>Wave Rating: {session.waveRating}</div>
-        <div className={`sessionDetailsRating ${getColorClass(session.sizeRating)}`}>Size Rating: {session.sizeRating}</div>
-        <div className={`sessionDetailsRating ${getColorClass(session.windRating)}`}>Wind Rating: {session.windRating}</div>
-        <div className={`sessionDetailsRating ${getColorClass(session.crowdRating)}`}>Crowd Rating: {session.crowdRating}</div>
-        <div>{session.primarySwellHeight} m at {session.primarySwellPeriod} seconds
+        <div className={`sessionDetailsRating ${getRatingColorClass(session.waveRating)}`}>Wave Rating: {session.waveRating}</div>
+        <div className={`sessionDetailsRating ${getRatingColorClass(session.sizeRating)}`}>Size Rating: {session.sizeRating}</div>
+        <div className={`sessionDetailsRating ${getRatingColorClass(session.windRating)}`}>Wind Rating: {session.windRating}</div>
+        <div className={`sessionDetailsRating ${getRatingColorClass(session.crowdRating)}`}>Crowd Rating: {session.crowdRating}</div>
+        <div className="sessionDetailsSwell">Dominant Swell: {session.primarySwellHeight} m at {session.primarySwellPeriod} seconds
           from {session.primarySwellDirection} degrees
         </div>
-        <div>Water Temperature: {convertTempToFahrenheit(session.buoyWaterTemperature)} F</div>
         <div>Average Swell Period: {session.averageSwellPeriod} s</div>
+        <div>Water Temperature: {convertTempToFahrenheit(session.buoyWaterTemperature)} F</div>
         <div className="buttonContainer">
           <button type="button" onClick={handleDeleteClick}>Delete Session</button>
           <button type="button" onClick={handleEditClick}>Edit Session</button>

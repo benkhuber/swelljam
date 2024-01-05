@@ -246,7 +246,8 @@ option {
 }
 
 .sessionDetailsDate {
-	font-size: 1.5rem;
+	font-size: 1.25rem;
+	padding: 0 1rem;
 }
 
 .sessionDetailsSpot {
@@ -269,4 +270,9 @@ option {
 
 .lowRating {
 	color: rgb(255, 79, 79); /* Set your desired color for low ratings */
+}
+
+.sessionDetailsSwell {
+	padding: 2rem 1rem;
+	font-size: 2.5rem;
 }
