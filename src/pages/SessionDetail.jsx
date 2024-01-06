@@ -7,6 +7,8 @@ function SessionDetail({ onDelete }) {
   const { state: { session } } = useLocation();
   const navigate = useNavigate();
 
+  console.log(session);
+
   const handleDeleteClick = async () => {
     try {
       await onDelete(sessionId);
@@ -59,6 +61,7 @@ function SessionDetail({ onDelete }) {
         <div className={`sessionDetailsRating ${getRatingColorClass(session.sizeRating)}`}>Size Rating: {session.sizeRating}</div>
         <div className={`sessionDetailsRating ${getRatingColorClass(session.windRating)}`}>Wind Rating: {session.windRating}</div>
         <div className={`sessionDetailsRating ${getRatingColorClass(session.crowdRating)}`}>Crowd Rating: {session.crowdRating}</div>
+        <div className={`sessionDetailsRating ${getRatingColorClass(session.averageRating)}`}>Average Rating: {session.averageRating}</div>
         <div className="sessionDetailsSwell">Dominant Swell: {session.primarySwellHeight} m at {session.primarySwellPeriod} seconds
           from {session.primarySwellDirection} degrees
         </div>

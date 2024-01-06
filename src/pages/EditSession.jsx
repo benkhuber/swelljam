@@ -15,6 +15,7 @@ function EditSession({ onDelete }) {
     sizeRating: session.sizeRating,
     windRating: session.windRating,
     crowdRating: session.crowdRating,
+    averageRating: session.averageRating,
     primarySwellHeight: session.primarySwellHeight,
     primarySwellDirection: session.primarySwellDirection,
     primarySwellPeriod: session.primarySwellPeriod,
@@ -116,9 +117,24 @@ function EditSession({ onDelete }) {
     }
   };
 
+  const calculateAverageRating = () => {
+    const totalRatings = (sessionData.waveRating + sessionData.sizeRating + sessionData.windRating
+      + sessionData.crowdRating);
+    const averageRating = totalRatings / 4;
+    setSessionData((prevSessionData) => ({
+      ...prevSessionData,
+      averageRating,
+    }));
+  };
+
   useEffect(() => {
     parseBuoyData(sessionData.dateTimeSelect);
   }, [buoyData, sessionData.dateTimeSelect]);
+
+  useEffect(() => {
+    calculateAverageRating();
+  }, [sessionData.waveRating, sessionData.sizeRating, sessionData.windRating,
+    sessionData.crowdRating]);
 
   const fetchSwellData = async () => {
     const apiUrl = `http://localhost:3001/api/buoydata/realtime/${sessionData.primaryBuoyID}`;
@@ -179,12 +195,8 @@ function EditSession({ onDelete }) {
     }));
   };
 
-  console.log(sessionData);
-
   const handleSubmitSession = async () => {
     try {
-      console.log(session._id);
-      console.log(sessionData);
       const response = await axios.put(
         `http://localhost:3001/api/updateSession/${session._id}`,
         sessionData,

@@ -16,6 +16,7 @@ function AddSession() {
     sizeRating: 0,
     windRating: 0,
     crowdRating: 0,
+    averageRating: 0,
     primarySwellHeight: 0,
     primarySwellDirection: 0,
     primarySwellPeriod: 0,
@@ -97,9 +98,24 @@ function AddSession() {
     }
   };
 
+  const calculateAverageRating = () => {
+    const totalRatings = (sessionData.waveRating + sessionData.sizeRating + sessionData.windRating
+      + sessionData.crowdRating);
+    const averageRating = totalRatings / 4;
+    setSessionData((prevSessionData) => ({
+      ...prevSessionData,
+      averageRating,
+    }));
+  };
+
   useEffect(() => {
     parseBuoyData(sessionData.dateTimeSelect);
   }, [buoyData, sessionData.dateTimeSelect]);
+
+  useEffect(() => {
+    calculateAverageRating();
+  }, [sessionData.waveRating, sessionData.sizeRating, sessionData.windRating,
+    sessionData.crowdRating]);
 
   const fetchSwellData = async () => {
     const apiUrl = `http://localhost:3001/api/buoydata/realtime/${sessionData.primaryBuoyID}`;
