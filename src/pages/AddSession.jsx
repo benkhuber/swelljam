@@ -84,7 +84,15 @@ function AddSession() {
         primarySwellPeriod: swellPeriod,
         averageSwellPeriod: avgPeriod,
         buoyWaterTemperature: waterTemp,
-
+      }));
+    } else {
+      setSessionData((prevSessionData) => ({
+        ...prevSessionData,
+        primarySwellHeight: null,
+        primarySwellDirection: null,
+        primarySwellPeriod: null,
+        averageSwellPeriod: null,
+        buoyWaterTemperature: null,
       }));
     }
   };

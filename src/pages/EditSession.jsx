@@ -103,10 +103,16 @@ function EditSession({ onDelete }) {
         primarySwellPeriod: swellPeriod,
         averageSwellPeriod: avgPeriod,
         buoyWaterTemperature: waterTemp,
-
       }));
     } else {
-      console.log('NO CLOSEST LINE');
+      setSessionData((prevSessionData) => ({
+        ...prevSessionData,
+        primarySwellHeight: null,
+        primarySwellDirection: null,
+        primarySwellPeriod: null,
+        averageSwellPeriod: null,
+        buoyWaterTemperature: null,
+      }));
     }
   };
 
