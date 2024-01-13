@@ -10,6 +10,7 @@ import Map from './pages/Map';
 import SessionDetail from './pages/SessionDetail';
 import EditSession from './pages/EditSession';
 import About from './pages/About';
+import ViewSessions from './pages/ViewSessions';
 
 const deleteSession = async (sessionId) => {
   try {
@@ -31,6 +32,7 @@ function App() {
         <Route path="/map" element={<Map />} />
         <Route path="/session/:sessionId" element={<SessionDetail onDelete={deleteSession} />} />
         <Route path="/editsession/:sessionId" element={<EditSession onDelete={deleteSession} />} />
+        <Route path="/viewsessions" element={<ViewSessions />} />
       </Routes>
     </Router>
   );

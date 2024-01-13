@@ -2,6 +2,7 @@
 /* eslint-disable no-restricted-syntax */
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import SessionCard from '../components/SessionCard';
 import RegionalForecast from '../components/RegionalForecast';
@@ -40,15 +41,22 @@ function Home() {
       <Header />
       <h3>Southern California Conditions</h3>
       <RegionalForecast />
-      <h3>Your Recent Sessions</h3>
+      <h3>Recent Sessions</h3>
       <div id="sessionsContainer">
         {sessionData && sessionData.length > 0 ? (
-          sessionData.map((session) => (
+          sessionData.slice(-3).map((session) => (
             <SessionCard session={session} onDelete={deleteSession} />
           ))
         ) : (
           <p>No recent sessions.</p>
         )}
+        <div>
+          {sessionData && sessionData.length > 3 && (
+          <Link to={{ pathname: '/viewsessions', state: { sessions: sessionData } }}>
+            View All Sessions
+          </Link>
+          )}
+        </div>
       </div>
     </div>
   );
