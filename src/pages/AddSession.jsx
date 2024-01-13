@@ -101,7 +101,7 @@ function AddSession() {
   const calculateAverageRating = () => {
     const totalRatings = (sessionData.waveRating + sessionData.sizeRating + sessionData.windRating
       + sessionData.crowdRating);
-    const averageRating = totalRatings / 4;
+    const averageRating = (totalRatings / 4).toFixed(1);
     setSessionData((prevSessionData) => ({
       ...prevSessionData,
       averageRating,

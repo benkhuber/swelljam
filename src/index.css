@@ -228,11 +228,37 @@ option {
 	flex-direction: column;
 	cursor: pointer;
 	border: solid 2px white;
-	height: 300px;
 	width: 28%;
-	padding: 10px;
-	margin: 20px;
+	padding: 15px;
+	margin: 15px;
 	justify-content: space-between;
+}
+
+.sessionCardDetails {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-content: stretch;
+}
+
+.sessionCardInfoPane {
+}
+
+.sessionCardRating {
+	font-size: 3rem;
+	justify-content: center;
+	align-items: center;
+	align-content: stretch;
+}
+
+.sessionCardValue {
+	border: solid 2px blue;
+}
+
+.sessionCardButtons {
+	padding-top: 10px;
+	display: flex;
+	justify-content: space-around;
 }
 
 .sessionDetails {

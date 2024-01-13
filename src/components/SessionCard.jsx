@@ -39,7 +39,7 @@ function SessionCard({ session, onDelete }) {
     navigate(`/editsession/${session._id}`, { state: { session } });
   };
 
-  const getBorderColor = (rating) => {
+  const getBorderColorClass = (rating) => {
     if (rating >= 8) {
       return 'highRatingBorder';
     } if (rating >= 5) {
@@ -49,19 +49,21 @@ function SessionCard({ session, onDelete }) {
   };
 
   return (
-    <div className={`sessionCard ${getBorderColor(session.averageRating)}`} id={session._id} onClick={handleCardClick}>
-      <div>{dateTimePST}</div>
-      <div>Spot: {session.selectedSpot}</div>
-      <div>Wave Rating: {session.waveRating}</div>
-      <div>Size Rating: {session.sizeRating}</div>
-      <div>Wind Rating: {session.windRating}</div>
-      <div>Crowd Rating: {session.crowdRating}</div>
-      <div>Average Rating: {session.averageRating}</div>
-      <div>{session.primarySwellHeight} m at {session.primarySwellPeriod} seconds
-        from {session.primarySwellDirection} degrees
+    <div className={`sessionCard ${getBorderColorClass(session.averageRating)}`} id={session._id} onClick={handleCardClick}>
+      <div className="sessionCardDetails">
+        <div className="sessionCardInfoPane">
+          <div>{dateTimePST}</div>
+          <div>{session.selectedSpot}</div>
+          <div>{session.primarySwellHeight} m at {session.primarySwellPeriod} seconds
+            from {session.primarySwellDirection} degrees
+          </div>
+          <div className="sessionCardButtons">
+            <button type="button" onClick={handleDeleteClick}>Delete Session</button>
+            <button type="button" onClick={handleEditClick}>Edit Session</button>
+          </div>
+        </div>
+        <div className="sessionCardRating">{session.averageRating}</div>
       </div>
-      <button type="button" onClick={handleDeleteClick}>Delete Session</button>
-      <button type="button" onClick={handleEditClick}>Edit Session</button>
     </div>
   );
 }
