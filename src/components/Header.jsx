@@ -8,8 +8,7 @@ function Header() {
         <a href="/">Home</a>
         <a href="/about">About</a>
         <a href="/addsession">Add Session</a>
-        <a href="/surfreport">Local Surf Report</a>
-        <a href="/map">Map</a>
+        <a href="/viewsessions">View Sessions</a>
       </div>
     </div>
   );

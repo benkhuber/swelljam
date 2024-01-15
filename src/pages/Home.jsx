@@ -41,7 +41,7 @@ function Home() {
       <Header />
       <h3>Southern California Conditions</h3>
       <RegionalForecast />
-      <h3>Recent Sessions</h3>
+      <h3>Your Recent Sessions</h3>
       <div id="sessionsContainer">
         {sessionData && sessionData.length > 0 ? (
           sessionData.slice(-3).map((session) => (
@@ -52,9 +52,12 @@ function Home() {
         )}
         <div>
           {sessionData && sessionData.length > 3 && (
-          <Link to={{ pathname: '/viewsessions', state: { sessions: sessionData } }}>
-            View All Sessions
-          </Link>
+            <Link
+              to="/viewsessions"
+              state={{ sessions: sessionData }}
+            >
+              View All Sessions
+            </Link>
           )}
         </div>
       </div>
