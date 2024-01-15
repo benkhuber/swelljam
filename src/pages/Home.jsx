@@ -39,7 +39,7 @@ function Home() {
   return (
     <div>
       <Header />
-      <h3>Southern California Conditions</h3>
+      <h3>Southern California Current Conditions</h3>
       <RegionalForecast />
       <h3>Your Recent Sessions</h3>
       <div id="sessionsContainer">
@@ -54,7 +54,6 @@ function Home() {
           {sessionData && sessionData.length > 3 && (
             <Link
               to="/viewsessions"
-              state={{ sessions: sessionData }}
             >
               View All Sessions
             </Link>
