@@ -3,8 +3,7 @@ import BuoyData from './BuoyData';
 
 function RegionalForecast() {
   return (
-    <div>RegionalForecast
-      <BuoyData currentStationId="46253" />
+    <div>hello there
     </div>
   );
 }

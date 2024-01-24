@@ -39,8 +39,7 @@ function Home() {
   return (
     <div>
       <Header />
-      <h3>Southern California Current Conditions</h3>
-      <RegionalForecast />
+      <RegionalForecast sessionData={sessionData} />
       <h3>Your Recent Sessions</h3>
       <div id="sessionsContainer">
         {sessionData && sessionData.length > 0 ? (
