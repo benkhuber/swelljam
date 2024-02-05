@@ -152,11 +152,26 @@ function RegionalForecast() {
   };
 
   const calculateTimeSinceLastReading = (dateInput) => {
-    console.log(dateInput);
+    const dateAtReading = new Date(dateInput);
     const currentDate = new Date();
 
-    console.log(currentDate);
-    return 1;
+    const timeDifference = currentDate.getTime() - dateAtReading.getTime();
+
+    const hours = Math.floor(timeDifference / (1000 * 60 * 60));
+    const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+
+    console.log(hours);
+    console.log(minutes);
+
+    if (hours > 1) {
+      return `${hours} hours, ${minutes} minutes ago`;
+    }
+
+    if (hours > 0) {
+      return `${hours} hour, ${minutes} minutes ago`;
+    }
+
+    return `${minutes} minutes ago`;
   };
 
   useEffect(() => {
@@ -184,7 +199,7 @@ function RegionalForecast() {
       <h3>{ currentConditions.currentStationName }</h3>
       <div>
         <h4> { currentConditions.currentStationLat }, { currentConditions.currentStationLon }</h4>
-        <h5> { calculateTimeSinceLastReading(currentConditions.localDate) }</h5>
+        <h5>Last Reading: { calculateTimeSinceLastReading(currentConditions.localDate) }</h5>
       </div>
     </div>
   );
