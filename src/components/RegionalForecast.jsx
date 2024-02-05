@@ -22,12 +22,20 @@ function RegionalForecast() {
     windSwellDirection: 'No Data',
     surfRating: 'No Data',
   });
+  const [currentWeatherConditions, setCurrentWeatherConditions] = useState({
+    temperature: 'No Data',
+    windSpeed: 'No Data',
+    windDirection: 'No Data',
+    windGustSpeed: 'No Data',
+    weatherCode: 'No Data',
+  });
 
   const currentStationId = '46253';
 
   const apiUrl = `http://localhost:3001/api/buoydata/realtime/${currentStationId}`;
   const spectralApiURL = `http://localhost:3001/api/buoydata/spectral/${currentStationId}`;
   const buoyStationsURL = 'http://localhost:3001/api/buoydata/allstations';
+  const northOCWindApiURL = 'https://api.open-meteo.com/v1/forecast?latitude=33.695&longitude=-118.0476&current=temperature_2m,weather_code,wind_speed_10m,wind_direction_10m,wind_gusts_10m&temperature_unit=fahrenheit&wind_speed_unit=kn&timezone=America%2FLos_Angeles&forecast_days=1';
 
   const fetchRawBuoyData = async () => {
     try {
@@ -71,6 +79,26 @@ function RegionalForecast() {
     }
   };
 
+  const fetchNorthOCWindData = async () => {
+    try {
+      const northOCWindResponse = await fetch(northOCWindApiURL);
+      if (!northOCWindResponse.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await northOCWindResponse.json();
+
+      setCurrentWeatherConditions({
+        temperature: data.current.temperature_2m,
+        windSpeed: data.current.wind_speed_10m,
+        windDirection: data.current.wind_direction_10m,
+        windGustSpeed: data.current.wind_gusts_10m,
+        weatherCode: data.current.weather_code,
+      });
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
   const parseAllStationRawData = () => {
     const xmlString = rawBuoyStations;
     const buoyStations = [];
@@ -100,11 +128,12 @@ function RegionalForecast() {
     setParsedBuoyStations(buoyStations);
   };
 
-  const calculateSurfRating = (swellPeriod) => {
-    if (swellPeriod >= 10) {
+  const calculateSurfRating = (swellPeriod, waveHeight) => {
+    if (swellPeriod > 13 && waveHeight > 1.8) {
+      return 'GOOD';
+    } if (swellPeriod > 9 && waveHeight > 0.75) {
       return 'FAIR';
     }
-
     return 'POOR';
   };
 
@@ -137,7 +166,7 @@ function RegionalForecast() {
               dominantSwellDirection: meanWaveDirection,
               significantHeight: waveHeight,
               peakPeriod: dominantPeriod,
-              surfRating: calculateSurfRating(dominantPeriod),
+              surfRating: calculateSurfRating(dominantPeriod, waveHeight),
             };
 
             setCurrentConditions(newConditions);
@@ -226,10 +255,32 @@ function RegionalForecast() {
     return stringOutput;
   };
 
+  const getSurfRatingColorClass = (surfRating) => {
+    if (surfRating === 'GOOD') {
+      return 'surfRatingColorGood';
+    }
+    if (surfRating === 'FAIR') {
+      return 'surfRatingColorFair';
+    }
+    return 'surfRatingColorPoor';
+  };
+
+  const getWindDescriptor = (degrees) => {
+    if (degrees >= 0 && degrees < 120) {
+      return 'Offshore wind';
+    } if (degrees >= 120 && degrees < 210) {
+      return 'Sideshore wind';
+    } if (degrees >= 210 && degrees < 330) {
+      return 'Onshore wind';
+    }
+    return 'Offshore wind';
+  };
+
   useEffect(() => {
     fetchRawBuoyData();
     fetchRawSpectralBuoyData();
     fetchBuoyStations();
+    fetchNorthOCWindData();
   }, []);
 
   useEffect(() => {
@@ -244,22 +295,41 @@ function RegionalForecast() {
     parseDominantSwellData();
   }, [rawBuoyData, rawSpectralData]);
 
+  useEffect(() => {
+    console.log(currentWeatherConditions);
+  }, [currentWeatherConditions]);
+
   return (
     <div>
       <h2 className="regionalForecastTitle">Southern California Regional Forecast</h2>
       <div>
         <h3>North OC</h3>
-        <div className="surfHeightConditionsContainer">
-          <div className="surfHeightDescriptor">{ populateSurfHeightDescription(currentConditions.significantHeight)}</div>
-          <div className="surfInfoPane">
-            <div className="surfHeightConditionsViewer">
-              <div className="surfRatingColor">1</div>
-              <div className="surfHeightContainer">
-                <div className="surfHeight">{ calculateSurfHeight(currentConditions.significantHeight) }</div>
-                <div className="surfRating">{ currentConditions.surfRating }</div>
+        <div className="conditionsContainer">
+          <div className="surfHeightConditionsContainer">
+            <div className="surfHeightDescriptor">{ populateSurfHeightDescription(currentConditions.significantHeight)}</div>
+            <div className="surfInfoPane">
+              <div className="surfHeightConditionsViewer">
+                <div className={`surfRatingColor ${getSurfRatingColorClass(currentConditions.surfRating)}`} />
+                <div className="surfHeightContainer">
+                  <div className="surfHeight">{ calculateSurfHeight(currentConditions.significantHeight) }</div>
+                  <div className="surfRating">{ currentConditions.surfRating }</div>
+                </div>
+              </div>
+              <div className="buoyReadings">
+                <div className="primaryBuoyReading">{ (currentConditions.significantHeight * 3.28).toFixed(1) } ft at { currentConditions.peakPeriod} s / {getSwellDirectionLabel(currentConditions.dominantSwellDirection)}
+                </div>
+                <div>Yes?</div>
+                <div>Ok</div>
               </div>
             </div>
-            <div>Yessir</div>
+          </div>
+          <div className="currentWeatherContainer">
+            <div className="windContainer">
+              <div className="windDescriptorDisplay">{getWindDescriptor(currentWeatherConditions.windDirection)}</div>
+              <div className="windSpeedDisplay">{Math.round(currentWeatherConditions.windSpeed)} mph {getSwellDirectionLabel(currentWeatherConditions.windDirection)}</div>
+              <div className="windGustDisplay">{currentWeatherConditions.windGustSpeed} mph gusts</div>
+            </div>
+            <div className="windArrow">yes</div>
           </div>
         </div>
       </div>

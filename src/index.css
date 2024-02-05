@@ -326,7 +326,6 @@ option {
 }
 
 .surfHeightConditionsContainer {
-	border: solid 2px red;
 	width: 600px;
 	display: flex;
 	flex-direction: column;
@@ -334,6 +333,7 @@ option {
 
 .surfHeightDescriptor {
 	font-size: 20px;
+	font-weight: 600;
 	margin: 10px 0px 0px 10px;
 }
 
@@ -341,20 +341,18 @@ option {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	border: solid 2px red;
 }
 
 .surfHeightConditionsViewer {
-	border: solid 2px red;
 	display: flex;
 	flex-direction: row;
-	width: 300px;
+	width: 250px;
 }
 
 .surfRatingColor {
 	height: 150px;
+	width: 20px;
 	margin: 20px 20px 20px 10px;
-	background-color: white;
 }
 
 .surfHeightContainer {
@@ -372,4 +370,69 @@ option {
 .surfRating {
 	font-size: 40px;
 	padding: 10px 0px 10px 0px;
+}
+
+.surfRatingColorGood {
+	background-color: orange;
+}
+
+.surfRatingColorFair {
+	background-color: rgb(53, 249, 53);
+}
+
+.surfRatingColorPoor {
+	background-color: rgb(35, 35, 216);
+}
+
+.buoyReadings {
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	gap: 10px;
+	width: 300px;
+	height: 150px;
+	padding: 20px 10px;
+}
+
+.primaryBuoyReading {
+	font-weight: 800;
+}
+
+.conditionsContainer {
+	border: solid 2px white;
+	display: flex;
+	justify-content: left;
+}
+
+.currentWeatherContainer {
+	display: flex;
+	border: solid 2px red;
+	width: 600px;
+	align-items: center;
+}
+
+.windContainer {
+	border: solid 2px purple;
+	width: 50%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 10px;
+}
+
+.windArrow {
+	border: solid 2px green;
+	width: 50%;
+}
+
+.windDescriptorDisplay {
+}
+
+.windSpeedDisplay {
+	font-size: 24px;
+	font-weight: 800;
+}
+
+.windGustDisplay {
+	font-size: 14px;
 }
