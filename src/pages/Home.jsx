@@ -40,7 +40,7 @@ function Home() {
     <div>
       <Header />
       <RegionalForecast sessionData={sessionData} />
-      <h3>Your Recent Sessions</h3>
+      <h3 className="recentSessionsTitle">Your Recent Sessions</h3>
       <div id="sessionsContainer">
         {sessionData && sessionData.length > 0 ? (
           sessionData.slice(-3).map((session) => (

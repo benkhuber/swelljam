@@ -154,24 +154,66 @@ function RegionalForecast() {
   const calculateTimeSinceLastReading = (dateInput) => {
     const dateAtReading = new Date(dateInput);
     const currentDate = new Date();
-
     const timeDifference = currentDate.getTime() - dateAtReading.getTime();
-
     const hours = Math.floor(timeDifference / (1000 * 60 * 60));
     const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
-
-    console.log(hours);
-    console.log(minutes);
 
     if (hours > 1) {
       return `${hours} hours, ${minutes} minutes ago`;
     }
-
     if (hours > 0) {
       return `${hours} hour, ${minutes} minutes ago`;
     }
 
     return `${minutes} minutes ago`;
+  };
+
+  const getSwellDirectionLabel = (degrees) => {
+    if (degrees >= 30 && degrees < 60) {
+      return 'NE';
+    } if (degrees >= 60 && degrees < 120) {
+      return 'E';
+    } if (degrees >= 120 && degrees < 150) {
+      return 'SE';
+    } if (degrees >= 150 && degrees < 210) {
+      return 'S';
+    } if (degrees >= 210 && degrees < 240) {
+      return 'SW';
+    } if (degrees >= 240 && degrees < 300) {
+      return 'W';
+    } if (degrees >= 300 && degrees < 330) {
+      return 'NW';
+    }
+    return 'N';
+  };
+
+  const calculateSurfHeight = (swellHeight) => {
+    const meterToFeetConversion = 3.28;
+    const convertedSwellHeight = Math.floor(swellHeight * meterToFeetConversion);
+    const convertedSwellHeightBottom = convertedSwellHeight - 1;
+    const convertedSwellHeightTop = convertedSwellHeight + 1;
+
+    return `${convertedSwellHeightBottom} - ${convertedSwellHeightTop} ft`;
+  };
+
+  const populateSurfHeightDescription = (swellHeight) => {
+    const meterToFeetConversion = 3.28;
+    const convertedSwellHeight = Math.floor(swellHeight * meterToFeetConversion);
+    let stringOutput = '';
+
+    if (convertedSwellHeight >= 7) {
+      stringOutput = 'Overhead to well overhead';
+    } else if (convertedSwellHeight >= 5 && convertedSwellHeight < 7) {
+      stringOutput = 'Shoulder high to overhead';
+    } else if (convertedSwellHeight >= 3 && convertedSwellHeight < 5) {
+      stringOutput = 'Waist to chest high';
+    } else if (convertedSwellHeight >= 1 && convertedSwellHeight < 3) {
+      stringOutput = 'Ankle to waist high';
+    } else {
+      stringOutput = 'Flat';
+    }
+
+    return stringOutput;
   };
 
   useEffect(() => {
@@ -195,11 +237,29 @@ function RegionalForecast() {
 
   return (
     <div>
-      <h2>Southern California Regional Forecast</h2>
+      <h2 className="regionalForecastTitle">Southern California Regional Forecast</h2>
+      <div>
+        <h3>North OC</h3>
+        <div className="surfHeightConditionsContainer">
+          <div className="surfHeightDescriptor">{ populateSurfHeightDescription(currentConditions.significantHeight)}</div>
+          <div className="surfInfoPane">
+            <div className="surfHeightConditionsViewer">
+              <div className="surfRatingColor">1</div>
+              <div className="surfHeightContainer">
+                <div className="surfHeight">{ calculateSurfHeight(currentConditions.significantHeight) }</div>
+                <div className="surfRating">POOR</div>
+              </div>
+            </div>
+            <div>Yessir</div>
+          </div>
+        </div>
+      </div>
       <h3>{ currentConditions.currentStationName }</h3>
       <div>
-        <h4> { currentConditions.currentStationLat }, { currentConditions.currentStationLon }</h4>
-        <h5>Last Reading: { calculateTimeSinceLastReading(currentConditions.localDate) }</h5>
+        <p> { currentConditions.currentStationLat }, { currentConditions.currentStationLon }</p>
+        <p>Last Reading: { calculateTimeSinceLastReading(currentConditions.localDate) }</p>
+        <p> { currentConditions.significantHeight } m at { currentConditions.peakPeriod} seconds from { getSwellDirectionLabel(currentConditions.dominantSwellDirection) } ({currentConditions.dominantSwellDirection})
+        </p>
       </div>
     </div>
   );
