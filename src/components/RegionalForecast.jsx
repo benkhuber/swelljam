@@ -20,6 +20,7 @@ function RegionalForecast() {
     windSwellHeight: 'No Data',
     windSwellPeriod: 'No Data',
     windSwellDirection: 'No Data',
+    surfRating: 'No Data',
   });
 
   const currentStationId = '46253';
@@ -99,6 +100,14 @@ function RegionalForecast() {
     setParsedBuoyStations(buoyStations);
   };
 
+  const calculateSurfRating = (swellPeriod) => {
+    if (swellPeriod >= 10) {
+      return 'FAIR';
+    }
+
+    return 'POOR';
+  };
+
   const parseDominantSwellData = () => {
     const lines = rawBuoyData.toString().split('\n');
 
@@ -128,6 +137,7 @@ function RegionalForecast() {
               dominantSwellDirection: meanWaveDirection,
               significantHeight: waveHeight,
               peakPeriod: dominantPeriod,
+              surfRating: calculateSurfRating(dominantPeriod),
             };
 
             setCurrentConditions(newConditions);
@@ -232,7 +242,6 @@ function RegionalForecast() {
 
   useEffect(() => {
     parseDominantSwellData();
-    console.log(currentConditions);
   }, [rawBuoyData, rawSpectralData]);
 
   return (
@@ -247,7 +256,7 @@ function RegionalForecast() {
               <div className="surfRatingColor">1</div>
               <div className="surfHeightContainer">
                 <div className="surfHeight">{ calculateSurfHeight(currentConditions.significantHeight) }</div>
-                <div className="surfRating">POOR</div>
+                <div className="surfRating">{ currentConditions.surfRating }</div>
               </div>
             </div>
             <div>Yessir</div>
