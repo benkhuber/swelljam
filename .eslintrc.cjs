@@ -31,5 +31,6 @@ module.exports = {
         assert: 'either',
       },
     ],
+    'no-restricted-syntax': ['error', 'ForInStatement', 'LabeledStatement', 'WithStatement'],
   },
 };

@@ -21,6 +21,7 @@ function RegionalForecast() {
     windSwellPeriod: 'No Data',
     windSwellDirection: 'No Data',
   });
+
   const currentStationId = '46253';
 
   const apiUrl = `http://localhost:3001/api/buoydata/realtime/${currentStationId}`;
@@ -98,6 +99,45 @@ function RegionalForecast() {
     setParsedBuoyStations(buoyStations);
   };
 
+  const parseDominantSwellData = () => {
+    const lines = rawBuoyData.toString().split('\n');
+
+    for (const line of lines) {
+      const values = line.trim().split(/\s+/);
+
+      if (values.length === 19) {
+        const year = values[0];
+        const month = values[1];
+        const day = values[2];
+        const hour = values[3];
+        const minute = values[4];
+        const waveHeight = values[8];
+        const meanWaveDirection = values[11];
+        const dominantPeriod = values[9];
+        const waterTemperature = values[14];
+
+        if (waveHeight !== 'WVHT') {
+          if (waveHeight !== 'm') {
+            const utcDate = `${year}-${month}-${day}T${hour}:${minute}:00.000Z`;
+            const newLocalDate = new Date(utcDate);
+
+            const newConditions = {
+              ...currentConditions,
+              localDate: newLocalDate,
+              currentWaterTemperature: waterTemperature,
+              dominantSwellDirection: meanWaveDirection,
+              significantHeight: waveHeight,
+              peakPeriod: dominantPeriod,
+            };
+
+            setCurrentConditions(newConditions);
+            break;
+          }
+        }
+      }
+    }
+  };
+
   const updateStationDisplay = () => {
     const selectedStation = parsedBuoyStations.find((station) => station.id === currentStationId);
     if (selectedStation) {
@@ -109,6 +149,14 @@ function RegionalForecast() {
       };
       setCurrentConditions(updatedConditions);
     }
+  };
+
+  const calculateTimeSinceLastReading = (dateInput) => {
+    console.log(dateInput);
+    const currentDate = new Date();
+
+    console.log(currentDate);
+    return 1;
   };
 
   useEffect(() => {
@@ -123,13 +171,21 @@ function RegionalForecast() {
 
   useEffect(() => {
     updateStationDisplay();
-    console.log(currentConditions.currentStationName);
   }, [parsedBuoyStations]);
+
+  useEffect(() => {
+    parseDominantSwellData();
+    console.log(currentConditions);
+  }, [rawBuoyData, rawSpectralData]);
 
   return (
     <div>
       <h2>Southern California Regional Forecast</h2>
       <h3>{ currentConditions.currentStationName }</h3>
+      <div>
+        <h4> { currentConditions.currentStationLat }, { currentConditions.currentStationLon }</h4>
+        <h5> { calculateTimeSinceLastReading(currentConditions.localDate) }</h5>
+      </div>
     </div>
   );
 }
