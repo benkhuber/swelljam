@@ -258,7 +258,9 @@ function RegionalForecast() {
       <div>
         <p> { currentConditions.currentStationLat }, { currentConditions.currentStationLon }</p>
         <p>Last Reading: { calculateTimeSinceLastReading(currentConditions.localDate) }</p>
-        <p> { currentConditions.significantHeight } m at { currentConditions.peakPeriod} seconds from { getSwellDirectionLabel(currentConditions.dominantSwellDirection) } ({currentConditions.dominantSwellDirection})
+        <p> { currentConditions.significantHeight } m at { currentConditions.peakPeriod} seconds
+          from {getSwellDirectionLabel(currentConditions.dominantSwellDirection)}
+          ({currentConditions.dominantSwellDirection})
         </p>
       </div>
     </div>
