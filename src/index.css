@@ -326,7 +326,7 @@ option {
 }
 
 .surfHeightConditionsContainer {
-	width: 600px;
+	width: 500px;
 	display: flex;
 	flex-direction: column;
 }
@@ -381,7 +381,7 @@ option {
 }
 
 .surfRatingColorPoor {
-	background-color: rgb(35, 35, 216);
+	background-color: rgb(68, 68, 249);
 }
 
 .buoyReadings {
@@ -401,19 +401,18 @@ option {
 .conditionsContainer {
 	border: solid 2px white;
 	display: flex;
+	width: 800px;
 	justify-content: left;
 }
 
 .currentWeatherContainer {
 	display: flex;
-	border: solid 2px red;
-	width: 600px;
+	width: 500px;
 	align-items: center;
 }
 
 .windContainer {
-	border: solid 2px purple;
-	width: 50%;
+	width: 150px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -421,11 +420,13 @@ option {
 }
 
 .windArrow {
-	border: solid 2px green;
-	width: 50%;
+	width: 60px;
+	height: 60px;
+	font-size: 60px;
 }
 
 .windDescriptorDisplay {
+	font-size: 20px;
 }
 
 .windSpeedDisplay {
@@ -435,4 +436,16 @@ option {
 
 .windGustDisplay {
 	font-size: 14px;
+}
+
+.windRatingPoor {
+	color: rgb(68, 68, 249);
+}
+
+.windRatingFair {
+	color: rgb(53, 249, 53);
+}
+
+.windRatingGood {
+	color: orange;
 }

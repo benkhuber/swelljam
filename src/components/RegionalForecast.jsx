@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import WindArrow from '../icons/WindArrow';
 
 function RegionalForecast() {
   const [rawBuoyData, setRawBuoyData] = useState([]);
@@ -128,7 +129,13 @@ function RegionalForecast() {
     setParsedBuoyStations(buoyStations);
   };
 
-  const calculateSurfRating = (swellPeriod, waveHeight) => {
+  const calculateSurfRating = (swellPeriod, waveHeight, currentWind, windDirection) => {
+    if (currentWind > 10 && windDirection > 120) {
+      return 'POOR';
+    }
+    if (currentWind > 10 && windDirection > 0 && windDirection < 120) {
+      return 'GOOD';
+    }
     if (swellPeriod > 13 && waveHeight > 1.8) {
       return 'GOOD';
     } if (swellPeriod > 9 && waveHeight > 0.75) {
@@ -137,7 +144,7 @@ function RegionalForecast() {
     return 'POOR';
   };
 
-  const parseDominantSwellData = () => {
+  const parseDominantSwellData = (currentWind, windDirection) => {
     const lines = rawBuoyData.toString().split('\n');
 
     for (const line of lines) {
@@ -166,7 +173,12 @@ function RegionalForecast() {
               dominantSwellDirection: meanWaveDirection,
               significantHeight: waveHeight,
               peakPeriod: dominantPeriod,
-              surfRating: calculateSurfRating(dominantPeriod, waveHeight),
+              surfRating: calculateSurfRating(
+                dominantPeriod,
+                waveHeight,
+                currentWind,
+                windDirection,
+              ),
             };
 
             setCurrentConditions(newConditions);
@@ -276,6 +288,17 @@ function RegionalForecast() {
     return 'Offshore wind';
   };
 
+  const getWindRating = (windSpeed, windDirection) => {
+    const windDescription = getWindDescriptor(windDirection);
+    if (windDescription === 'Offshore wind') {
+      return 'windRatingGood';
+    }
+    if (windSpeed > 10 && windDescription === 'Onshore wind') {
+      return 'windRatingPoor';
+    }
+    return 'windRatingFair';
+  };
+
   useEffect(() => {
     fetchRawBuoyData();
     fetchRawSpectralBuoyData();
@@ -292,18 +315,20 @@ function RegionalForecast() {
   }, [parsedBuoyStations]);
 
   useEffect(() => {
-    parseDominantSwellData();
+    parseDominantSwellData(
+      currentWeatherConditions.windSpeed,
+      currentWeatherConditions.windDirection,
+    );
   }, [rawBuoyData, rawSpectralData]);
 
   useEffect(() => {
-    console.log(currentWeatherConditions);
   }, [currentWeatherConditions]);
 
   return (
     <div>
       <h2 className="regionalForecastTitle">Southern California Regional Forecast</h2>
       <div>
-        <h3>North OC</h3>
+        <h3>North Orange County</h3>
         <div className="conditionsContainer">
           <div className="surfHeightConditionsContainer">
             <div className="surfHeightDescriptor">{ populateSurfHeightDescription(currentConditions.significantHeight)}</div>
@@ -327,9 +352,9 @@ function RegionalForecast() {
             <div className="windContainer">
               <div className="windDescriptorDisplay">{getWindDescriptor(currentWeatherConditions.windDirection)}</div>
               <div className="windSpeedDisplay">{Math.round(currentWeatherConditions.windSpeed)} mph {getSwellDirectionLabel(currentWeatherConditions.windDirection)}</div>
-              <div className="windGustDisplay">{currentWeatherConditions.windGustSpeed} mph gusts</div>
+              <div className="windGustDisplay">{Math.round(currentWeatherConditions.windGustSpeed)} mph gusts</div>
             </div>
-            <div className="windArrow">yes</div>
+            <div className={`windArrow ${getWindRating(currentWeatherConditions.windSpeed, currentWeatherConditions.windDirection)}`}><WindArrow windDirection={currentWeatherConditions.windDirection} /></div>
           </div>
         </div>
       </div>
