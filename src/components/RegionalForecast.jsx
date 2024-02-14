@@ -189,6 +189,36 @@ function RegionalForecast() {
     }
   };
 
+  const parseSpectralSwellData = () => {
+    const lines = rawSpectralData.toString().split('\n');
+
+    for (const line of lines) {
+      const values = line.trim().split(/\s+/);
+
+      if (values.length === 15) {
+        const swellHeight = values[6];
+        const swellPeriod = values[7];
+        const windWaveHeight = values[8];
+        const windWavePeriod = values[9];
+        const swellDirection = values[10];
+        const windWaveDirection = values[11];
+
+        if (swellHeight !== 'SwH') {
+          if (swellHeight !== 'm') {
+            currentConditions.individualSwellHeight = swellHeight;
+            console.log(swellHeight);
+            currentConditions.individualSwellPeriod = swellPeriod;
+            currentConditions.individualSwellDirection = swellDirection;
+            currentConditions.windSwellHeight = windWaveHeight;
+            currentConditions.windSwellPeriod = windWavePeriod;
+            currentConditions.windSwellDirection = windWaveDirection;
+            break;
+          }
+        }
+      }
+    }
+  };
+
   const updateStationDisplay = () => {
     const selectedStation = parsedBuoyStations.find((station) => station.id === currentStationId);
     if (selectedStation) {
@@ -293,7 +323,7 @@ function RegionalForecast() {
     if (windDescription === 'Offshore wind') {
       return 'windRatingGood';
     }
-    if (windSpeed > 10 && windDescription === 'Onshore wind') {
+    if (windSpeed >= 5 && windDescription === 'Onshore wind') {
       return 'windRatingPoor';
     }
     return 'windRatingFair';
@@ -319,7 +349,13 @@ function RegionalForecast() {
       currentWeatherConditions.windSpeed,
       currentWeatherConditions.windDirection,
     );
-  }, [rawBuoyData, rawSpectralData]);
+    updateStationDisplay();
+  }, [rawBuoyData]);
+
+  useEffect(() => {
+    parseSpectralSwellData();
+    updateStationDisplay();
+  }, [rawSpectralData]);
 
   useEffect(() => {
   }, [currentWeatherConditions]);
@@ -341,10 +377,12 @@ function RegionalForecast() {
                 </div>
               </div>
               <div className="buoyReadings">
-                <div className="primaryBuoyReading">{ (currentConditions.significantHeight * 3.28).toFixed(1) } ft at { currentConditions.peakPeriod} s / {getSwellDirectionLabel(currentConditions.dominantSwellDirection)}
+                <div className="primaryBuoyReading">{ (currentConditions.significantHeight * 3.28).toFixed(1) } ft at { Math.round(currentConditions.peakPeriod)} s / {getSwellDirectionLabel(currentConditions.dominantSwellDirection)} ({currentConditions.dominantSwellDirection}&deg;)
                 </div>
-                <div>Yes?</div>
-                <div>Ok</div>
+                <div className="individualBuoyReading">{ (currentConditions.individualSwellHeight * 3.28).toFixed(1) } ft at { Math.round(currentConditions.individualSwellPeriod) } s / {currentConditions.individualSwellDirection}
+                </div>
+                <div className="windBuoyReading">{ (currentConditions.windSwellHeight * 3.28).toFixed(1) } ft at { Math.round(currentConditions.windSwellPeriod) } s / {currentConditions.windSwellDirection}
+                </div>
               </div>
             </div>
           </div>
@@ -356,9 +394,12 @@ function RegionalForecast() {
             </div>
             <div className={`windArrow ${getWindRating(currentWeatherConditions.windSpeed, currentWeatherConditions.windDirection)}`}><WindArrow windDirection={currentWeatherConditions.windDirection} /></div>
           </div>
+          <div>
+            { Math.round(currentWeatherConditions.temperature) } F
+          </div>
         </div>
       </div>
-      <h3>{ currentConditions.currentStationName }</h3>
+      {/* <h3>{ currentConditions.currentStationName }</h3>
       <div>
         <p> { currentConditions.currentStationLat }, { currentConditions.currentStationLon }</p>
         <p>Last Reading: { calculateTimeSinceLastReading(currentConditions.localDate) }</p>
@@ -366,7 +407,7 @@ function RegionalForecast() {
           from {getSwellDirectionLabel(currentConditions.dominantSwellDirection)}
           ({currentConditions.dominantSwellDirection})
         </p>
-      </div>
+      </div> */}
     </div>
   );
 }
