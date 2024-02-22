@@ -3,10 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 function SessionCard({ session, onDelete }) {
   const navigate = useNavigate();
-  console.log(session);
 
   const handleCardClick = () => {
-    console.log(session._id);
     navigate(`/session/${session._id}`, { state: { session } });
   };
 

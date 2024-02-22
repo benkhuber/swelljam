@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import WindArrow from '../icons/WindArrow';
 
-function RegionalForecast() {
+function RegionalForecast({ region, stationID }) {
   const [rawBuoyData, setRawBuoyData] = useState([]);
   const [rawSpectralData, setRawSpectralData] = useState([]);
   const [rawBuoyStations, setRawBuoyStations] = useState([]);
@@ -31,7 +31,7 @@ function RegionalForecast() {
     weatherCode: 'No Data',
   });
 
-  const currentStationId = '46253';
+  const currentStationId = stationID;
 
   const apiUrl = `http://localhost:3001/api/buoydata/realtime/${currentStationId}`;
   const spectralApiURL = `http://localhost:3001/api/buoydata/spectral/${currentStationId}`;
@@ -238,13 +238,18 @@ function RegionalForecast() {
     const hours = Math.floor(timeDifference / (1000 * 60 * 60));
     const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
 
-    if (hours > 1) {
+    if (hours > 1 && minutes < 2) {
+      return `${hours} hours ago`;
+    }
+    if (hours > 1 && minutes >= 2) {
       return `${hours} hours, ${minutes} minutes ago`;
+    }
+    if (hours > 0 && minutes < 2) {
+      return `${hours} hour ago`;
     }
     if (hours > 0) {
       return `${hours} hour, ${minutes} minutes ago`;
     }
-
     return `${minutes} minutes ago`;
   };
 
@@ -365,45 +370,46 @@ function RegionalForecast() {
 
   return (
     <div>
-      <h2 className="regionalForecastTitle">Southern California Regional Forecast</h2>
-      <div>
-        <h3>North Orange County</h3>
-        <div className="conditionsContainer">
-          <div className="surfHeightConditionsContainer">
-            <div className="surfHeightDescriptor">{ populateSurfHeightDescription(currentConditions.significantHeight)}</div>
-            <div className="surfInfoPane">
-              <div className="surfHeightConditionsViewer">
-                <div className={`surfRatingColor ${getSurfRatingColorClass(currentConditions.surfRating)}`} />
-                <div className="surfHeightContainer">
-                  <div className="surfHeight">{ calculateSurfHeight(currentConditions.significantHeight) }</div>
-                  <div className="surfRating">{ currentConditions.surfRating }</div>
-                  <div>{ calculateTimeSinceLastReading(currentConditions.localDate) }</div>
-                </div>
-              </div>
-              <div className="buoyReadings">
-                <div className="primaryBuoyReading">{ (currentConditions.significantHeight * 3.28).toFixed(1) } ft at { Math.round(currentConditions.peakPeriod)} s / {getSwellDirectionLabel(currentConditions.dominantSwellDirection)} ({currentConditions.dominantSwellDirection}&deg;)
-                </div>
-                <div className="individualBuoyReading">{ (currentConditions.individualSwellHeight * 3.28).toFixed(1) } ft at { Math.round(currentConditions.individualSwellPeriod) } s / {currentConditions.individualSwellDirection}
-                </div>
-                <div className="windBuoyReading">{ (currentConditions.windSwellHeight * 3.28).toFixed(1) } ft at { Math.round(currentConditions.windSwellPeriod) } s / {currentConditions.windSwellDirection}
+      <h3>{ region }</h3>
+      <div className="conditionsContainer">
+        <div className="surfHeightConditionsContainer">
+          <div className="surfHeightDescriptor">{ populateSurfHeightDescription(currentConditions.significantHeight)}</div>
+          <div className="surfInfoPane">
+            <div className="surfHeightConditionsViewer">
+              <div className={`surfRatingColor ${getSurfRatingColorClass(currentConditions.surfRating)}`} />
+              <div className="surfHeightContainer">
+                <div className="surfHeight">{ calculateSurfHeight(currentConditions.significantHeight) }</div>
+                <div className="surfRating">{ currentConditions.surfRating }</div>
+                <div>{ calculateTimeSinceLastReading(
+                  currentConditions.localDate,
+                )} ({currentConditions.currentStationName})
                 </div>
               </div>
             </div>
-          </div>
-          <div className="currentWeatherContainer">
-            <div className="windContainer">
-              <div className="windDescriptorDisplay">{getWindDescriptor(currentWeatherConditions.windDirection)}</div>
-              <div className="windSpeedDisplay">{Math.round(currentWeatherConditions.windSpeed)} mph {getSwellDirectionLabel(currentWeatherConditions.windDirection)}</div>
-              <div className="windGustDisplay">{Math.round(currentWeatherConditions.windGustSpeed)} mph gusts</div>
+            <div className="buoyReadings">
+              <div className="primaryBuoyReading">{ (currentConditions.significantHeight * 3.28).toFixed(1) } ft at { Math.round(currentConditions.peakPeriod)} s / {getSwellDirectionLabel(currentConditions.dominantSwellDirection)} ({currentConditions.dominantSwellDirection}&deg;)
+              </div>
+              <div className="individualBuoyReading">{ (currentConditions.individualSwellHeight * 3.28).toFixed(1) } ft at { Math.round(currentConditions.individualSwellPeriod) } s / {currentConditions.individualSwellDirection}
+              </div>
+              <div className="windBuoyReading">{ (currentConditions.windSwellHeight * 3.28).toFixed(1) } ft at { Math.round(currentConditions.windSwellPeriod) } s / {currentConditions.windSwellDirection}
+              </div>
             </div>
-            <div className={`windArrow ${getWindRating(currentWeatherConditions.windSpeed, currentWeatherConditions.windDirection)}`}><WindArrow windDirection={currentWeatherConditions.windDirection} /></div>
-          </div>
-          <div>
-            { Math.round(currentWeatherConditions.temperature) } F
           </div>
         </div>
+        <div className="currentWeatherContainer">
+          <div className="windContainer">
+            <div className="windDescriptorDisplay">{getWindDescriptor(currentWeatherConditions.windDirection)}</div>
+            <div className="windSpeedDisplay">{Math.round(currentWeatherConditions.windSpeed)} mph {getSwellDirectionLabel(currentWeatherConditions.windDirection)}</div>
+            <div className="windGustDisplay">{Math.round(currentWeatherConditions.windGustSpeed)} mph gusts</div>
+          </div>
+          <div className={`windArrow ${getWindRating(currentWeatherConditions.windSpeed, currentWeatherConditions.windDirection)}`}><WindArrow windDirection={currentWeatherConditions.windDirection} /></div>
+        </div>
+        <div>
+          { Math.round(currentWeatherConditions.temperature) } F
+        </div>
       </div>
-      {/* <h3>{ currentConditions.currentStationName }</h3>
+    </div>
+  /* <h3>{ currentConditions.currentStationName }</h3>
       <div>
         <p> { currentConditions.currentStationLat }, { currentConditions.currentStationLon }</p>
         <p>Last Reading: { calculateTimeSinceLastReading(currentConditions.localDate) }</p>
@@ -411,8 +417,7 @@ function RegionalForecast() {
           from {getSwellDirectionLabel(currentConditions.dominantSwellDirection)}
           ({currentConditions.dominantSwellDirection})
         </p>
-      </div> */}
-    </div>
+      </div> */
   );
 }
 
