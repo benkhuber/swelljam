@@ -40,8 +40,8 @@ function Home() {
     <div>
       <Header />
       <h2 className="regionalForecastTitle">Southern California Regional Forecast</h2>
-      <RegionalForecast region="North Orange County" stationID="46253" />
-      <RegionalForecast region="South Orange County" stationID="46277" />
+      <RegionalForecast region="North Orange County" stationID="46253" windLat="33.695" windLong="-118.0476" />
+      <RegionalForecast region="South Orange County" stationID="46277" windLat="33.416" windLong="-117.6176" />
       <h3 className="recentSessionsTitle">Your Recent Sessions</h3>
       <div id="sessionsContainer">
         {sessionData && sessionData.length > 0 ? (

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import WindArrow from '../icons/WindArrow';
 
-function RegionalForecast({ region, stationID }) {
+function RegionalForecast({
+  region, stationID, windLat, windLong,
+}) {
   const [rawBuoyData, setRawBuoyData] = useState([]);
   const [rawSpectralData, setRawSpectralData] = useState([]);
   const [rawBuoyStations, setRawBuoyStations] = useState([]);
@@ -36,7 +38,7 @@ function RegionalForecast({ region, stationID }) {
   const apiUrl = `http://localhost:3001/api/buoydata/realtime/${currentStationId}`;
   const spectralApiURL = `http://localhost:3001/api/buoydata/spectral/${currentStationId}`;
   const buoyStationsURL = 'http://localhost:3001/api/buoydata/allstations';
-  const northOCWindApiURL = 'https://api.open-meteo.com/v1/forecast?latitude=33.695&longitude=-118.0476&current=temperature_2m,weather_code,wind_speed_10m,wind_direction_10m,wind_gusts_10m&temperature_unit=fahrenheit&wind_speed_unit=kn&timezone=America%2FLos_Angeles&forecast_days=1';
+  const windConditionsURL = `https://api.open-meteo.com/v1/forecast?latitude=${windLat}&longitude=${windLong}&current=temperature_2m,weather_code,wind_speed_10m,wind_direction_10m,wind_gusts_10m&temperature_unit=fahrenheit&wind_speed_unit=kn&timezone=America%2FLos_Angeles&forecast_days=1`;
 
   const fetchRawBuoyData = async () => {
     try {
@@ -80,13 +82,13 @@ function RegionalForecast({ region, stationID }) {
     }
   };
 
-  const fetchNorthOCWindData = async () => {
+  const fetchWindData = async () => {
     try {
-      const northOCWindResponse = await fetch(northOCWindApiURL);
-      if (!northOCWindResponse.ok) {
+      const windResponse = await fetch(windConditionsURL);
+      if (!windResponse.ok) {
         throw new Error('Network response was not ok');
       }
-      const data = await northOCWindResponse.json();
+      const data = await windResponse.json();
 
       setCurrentWeatherConditions({
         temperature: data.current.temperature_2m,
@@ -131,17 +133,17 @@ function RegionalForecast({ region, stationID }) {
 
   const calculateSurfRating = (swellPeriod, waveHeight, currentWind, windDirection) => {
     if (currentWind > 10 && windDirection > 120) {
-      return 'POOR';
+      return 'CHOPPY';
     }
     if (currentWind > 10 && windDirection > 0 && windDirection < 120) {
-      return 'GOOD';
+      return 'CLEAN';
     }
     if (swellPeriod > 13 && waveHeight > 1.8) {
-      return 'GOOD';
+      return 'CLEAN';
     } if (swellPeriod > 9 && waveHeight > 0.75) {
       return 'FAIR';
     }
-    return 'POOR';
+    return 'CHOPPY';
   };
 
   const parseDominantSwellData = (currentWind, windDirection) => {
@@ -306,7 +308,7 @@ function RegionalForecast({ region, stationID }) {
   };
 
   const getSurfRatingColorClass = (surfRating) => {
-    if (surfRating === 'GOOD') {
+    if (surfRating === 'CLEAN') {
       return 'surfRatingColorGood';
     }
     if (surfRating === 'FAIR') {
@@ -341,7 +343,7 @@ function RegionalForecast({ region, stationID }) {
     fetchRawBuoyData();
     fetchRawSpectralBuoyData();
     fetchBuoyStations();
-    fetchNorthOCWindData();
+    fetchWindData();
   }, []);
 
   useEffect(() => {
