@@ -206,7 +206,6 @@ function RegionalForecast() {
         if (swellHeight !== 'SwH') {
           if (swellHeight !== 'm') {
             currentConditions.individualSwellHeight = swellHeight;
-            console.log(swellHeight);
             currentConditions.individualSwellPeriod = swellPeriod;
             currentConditions.individualSwellDirection = swellDirection;
             currentConditions.windSwellHeight = windWaveHeight;
@@ -269,6 +268,10 @@ function RegionalForecast() {
   };
 
   const calculateSurfHeight = (swellHeight) => {
+    if (Number.isNaN(parseInt(swellHeight, 10))) {
+      return 'No Data Available';
+    }
+
     const meterToFeetConversion = 3.28;
     const convertedSwellHeight = Math.floor(swellHeight * meterToFeetConversion);
     const convertedSwellHeightBottom = convertedSwellHeight - 1;
@@ -374,6 +377,7 @@ function RegionalForecast() {
                 <div className="surfHeightContainer">
                   <div className="surfHeight">{ calculateSurfHeight(currentConditions.significantHeight) }</div>
                   <div className="surfRating">{ currentConditions.surfRating }</div>
+                  <div>{ calculateTimeSinceLastReading(currentConditions.localDate) }</div>
                 </div>
               </div>
               <div className="buoyReadings">
