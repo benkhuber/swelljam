@@ -133,7 +133,7 @@ function RegionalForecast({
 
   const calculateSurfRating = (swellPeriod, waveHeight, currentWind, windDirection) => {
     if (currentWind > 10 && windDirection > 120) {
-      return 'CHOPPY';
+      return 'POOR';
     }
     if (currentWind > 10 && windDirection > 0 && windDirection < 120) {
       return 'CLEAN';
@@ -143,7 +143,7 @@ function RegionalForecast({
     } if (swellPeriod > 9 && waveHeight > 0.75) {
       return 'FAIR';
     }
-    return 'CHOPPY';
+    return 'POOR';
   };
 
   const parseDominantSwellData = (currentWind, windDirection) => {
@@ -339,6 +339,27 @@ function RegionalForecast({
     return 'windRatingFair';
   };
 
+  const getWeatherCondition = (code) => {
+    switch (code) {
+      case 0: return 'Clear sky';
+      case 1: return 'Mainly clear';
+      case 2: return 'Partly cloudy';
+      case 3: return 'Overcast';
+      case 45: return 'Fog';
+      case 48: return 'Fog';
+      case 51: return 'Drizzle';
+      case 53: return 'Drizzle';
+      case 55: return 'Drizzle';
+      case 61: return 'Light rain';
+      case 63: return 'Moderate rain';
+      case 65: return 'Heavy rain';
+      case 80: return 'Light rain showers';
+      case 81: return 'Moderate rain showers';
+      case 82: return 'Heavy rain showers';
+      default: return 'Unknown weather code';
+    }
+  };
+
   useEffect(() => {
     fetchRawBuoyData();
     fetchRawSpectralBuoyData();
@@ -368,6 +389,7 @@ function RegionalForecast({
   }, [rawSpectralData]);
 
   useEffect(() => {
+    console.log(currentWeatherConditions);
   }, [currentWeatherConditions]);
 
   return (
@@ -384,7 +406,7 @@ function RegionalForecast({
                 <div className="surfRating">{ currentConditions.surfRating }</div>
                 <div>{ calculateTimeSinceLastReading(
                   currentConditions.localDate,
-                )} ({currentConditions.currentStationName})
+                )}
                 </div>
               </div>
             </div>
@@ -406,8 +428,9 @@ function RegionalForecast({
           </div>
           <div className={`windArrow ${getWindRating(currentWeatherConditions.windSpeed, currentWeatherConditions.windDirection)}`}><WindArrow windDirection={currentWeatherConditions.windDirection} /></div>
         </div>
-        <div>
-          { Math.round(currentWeatherConditions.temperature) } F
+        <div className="temperatureContainer">
+          <div>{ Math.round(currentWeatherConditions.temperature) } &deg;F</div>
+          <div>{ getWeatherCondition(currentWeatherConditions.weatherCode) }</div>
         </div>
       </div>
     </div>
