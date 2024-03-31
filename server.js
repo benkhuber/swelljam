@@ -9,7 +9,7 @@ dotenv.config({ path: './.env' });
 const app = Express();
 const port = process.env.PORT;
 const url = process.env.DB_STRING;
-const apiUrl = 'https://www.ndbc.noaa.gov/data/realtime2/46253.txt';
+const stationId = '46253';
 
 mongoose.connect(url);
 
@@ -22,10 +22,11 @@ db.once('open', () => {
 
 const BuoyDataSchema = new mongoose.Schema({
   readingDate: Date,
-  significantHeight: Number,
-  dominantSwellDirection: Number,
-  peakPeriod: Number,
-  currentWaterTemperature: Number,
+  waveHeight: Number,
+  meanWaveDirection: Number,
+  averagePeriod: Number,
+  dominantWavePeriod: Number,
+  waterTemperature: Number,
 });
 
 const StationReadingSchema = new mongoose.Schema({
@@ -38,9 +39,10 @@ const BuoyData = mongoose.model('BuoyData', BuoyDataSchema, 'BuoyReadings');
 
 const fetchData = async () => {
   try {
-    const response = await axios.get(apiUrl);
+    const buoyResponse = await axios.get(`https://www.ndbc.noaa.gov/data/realtime2/${stationId}.txt`);
+    const detailedBuoyResponse = await axios.get(`https://www.ndbc.noaa.gov/data/realtime2/${stationId}.spec`);
 
-    const lines = response.data.toString().split('\n');
+    const lines = buoyResponse.data.toString().split('\n');
     const currentReading = lines[2].trim().split(/\s+/);
 
     const year = currentReading[0];
@@ -49,21 +51,23 @@ const fetchData = async () => {
     const hour = currentReading[3];
     const minute = currentReading[4];
     const waveHeight = currentReading[8];
+    const averagePeriod = currentReading[10];
     const meanWaveDirection = currentReading[11];
-    const dominantPeriod = currentReading[9];
+    const dominantWavePeriod = currentReading[9];
     const waterTemperature = currentReading[14];
 
     const utcDate = `${year}-${month}-${day}T${hour}:${minute}:00.000Z`;
-    const newLocalDate = new Date(utcDate);
+    const readingDate = new Date(utcDate);
 
     const current = new StationReading({
       buoyStationId: '46253',
       buoyReading: new BuoyData({
-        readingDate: newLocalDate,
-        significantHeight: waveHeight,
-        dominantSwellDirection: meanWaveDirection,
-        peakPeriod: dominantPeriod,
-        currentWaterTemperature: waterTemperature,
+        readingDate,
+        waveHeight,
+        meanWaveDirection,
+        averagePeriod,
+        dominantWavePeriod,
+        waterTemperature,
       }),
     });
 
