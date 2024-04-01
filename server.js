@@ -40,7 +40,7 @@ const BuoyData = mongoose.model('BuoyData', BuoyDataSchema, 'BuoyReadings');
 const fetchData = async () => {
   try {
     const buoyResponse = await axios.get(`https://www.ndbc.noaa.gov/data/realtime2/${stationId}.txt`);
-    const detailedBuoyResponse = await axios.get(`https://www.ndbc.noaa.gov/data/realtime2/${stationId}.spec`);
+    // const detailedBuoyResponse = await axios.get(`https://www.ndbc.noaa.gov/data/realtime2/${stationId}.spec`);
 
     const lines = buoyResponse.data.toString().split('\n');
     const currentReading = lines[2].trim().split(/\s+/);
