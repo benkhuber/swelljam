@@ -9,7 +9,6 @@ dotenv.config({ path: './.env' });
 const app = Express();
 const port = process.env.PORT;
 const url = process.env.DB_STRING;
-const stationId = '46253';
 
 mongoose.connect(url);
 
@@ -43,7 +42,7 @@ const StationReadingSchema = new mongoose.Schema({
 const StationReading = mongoose.model('StationReading', StationReadingSchema, 'BuoyReadings');
 const BuoyData = mongoose.model('BuoyData', BuoyDataSchema, 'BuoyReadings');
 
-const fetchData = async () => {
+const fetchData = async (stationId) => {
   try {
     // Parse Dominant Buoy Data
     const buoyResponse = await axios.get(`https://www.ndbc.noaa.gov/data/realtime2/${stationId}.txt`);
@@ -103,12 +102,20 @@ const fetchData = async () => {
   }
 };
 
+const availableBuoys = ['46253', '46222', '46277'];
+
+const queryAllBuoys = () => {
+  availableBuoys.forEach((buoyStation) => {
+    fetchData(buoyStation);
+  });
+};
+
 app.get('/', (req, res) => {
   res.send('Hello, World');
 });
 
-fetchData();
-setInterval(fetchData, 3600000);
+queryAllBuoys();
+setInterval(queryAllBuoys, 3600000);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
