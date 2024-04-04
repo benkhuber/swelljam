@@ -39,11 +39,11 @@ const StationReadingSchema = new mongoose.Schema({
   buoyReading: BuoyDataSchema,
 });
 
-const StationReading = mongoose.model('StationReading', StationReadingSchema, 'BuoyReadings');
-const BuoyData = mongoose.model('BuoyData', BuoyDataSchema, 'BuoyReadings');
-
 const fetchData = async (stationId) => {
   try {
+    const StationReading = mongoose.model('StationReading', StationReadingSchema, `${stationId}`);
+    const BuoyData = mongoose.model('BuoyData', BuoyDataSchema, `${stationId}`);
+
     // Parse Dominant Buoy Data
     const buoyResponse = await axios.get(`https://www.ndbc.noaa.gov/data/realtime2/${stationId}.txt`);
 
