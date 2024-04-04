@@ -22,11 +22,17 @@ db.once('open', () => {
 
 const BuoyDataSchema = new mongoose.Schema({
   readingDate: Date,
-  waveHeight: Number,
+  significantWaveHeight: Number,
   meanWaveDirection: Number,
-  averagePeriod: Number,
+  averageWavePeriod: Number,
   dominantWavePeriod: Number,
   waterTemperature: Number,
+  swellHeight: Number,
+  swellPeriod: Number,
+  swellDirection: String,
+  windWaveHeight: Number,
+  windWavePeriod: Number,
+  windWaveDirection: String,
 });
 
 const StationReadingSchema = new mongoose.Schema({
@@ -39,8 +45,8 @@ const BuoyData = mongoose.model('BuoyData', BuoyDataSchema, 'BuoyReadings');
 
 const fetchData = async () => {
   try {
+    // Parse Dominant Buoy Data
     const buoyResponse = await axios.get(`https://www.ndbc.noaa.gov/data/realtime2/${stationId}.txt`);
-    // const detailedBuoyResponse = await axios.get(`https://www.ndbc.noaa.gov/data/realtime2/${stationId}.spec`);
 
     const lines = buoyResponse.data.toString().split('\n');
     const currentReading = lines[2].trim().split(/\s+/);
@@ -50,8 +56,8 @@ const fetchData = async () => {
     const day = currentReading[2];
     const hour = currentReading[3];
     const minute = currentReading[4];
-    const waveHeight = currentReading[8];
-    const averagePeriod = currentReading[10];
+    const significantWaveHeight = currentReading[8];
+    const averageWavePeriod = currentReading[10];
     const meanWaveDirection = currentReading[11];
     const dominantWavePeriod = currentReading[9];
     const waterTemperature = currentReading[14];
@@ -59,19 +65,37 @@ const fetchData = async () => {
     const utcDate = `${year}-${month}-${day}T${hour}:${minute}:00.000Z`;
     const readingDate = new Date(utcDate);
 
+    // Parse Spectral Buoy Data
+    const detailedBuoyResponse = await axios.get(`https://www.ndbc.noaa.gov/data/realtime2/${stationId}.spec`);
+
+    const spectralLines = detailedBuoyResponse.data.toString().split('\n');
+    const currentSpectralReading = spectralLines[2].trim().split(/\s+/);
+
+    const swellHeight = currentSpectralReading[6];
+    const swellPeriod = currentSpectralReading[7];
+    const swellDirection = currentSpectralReading[10];
+    const windWaveHeight = currentSpectralReading[8];
+    const windWavePeriod = currentSpectralReading[9];
+    const windWaveDirection = currentSpectralReading[11];
+
+    // New Station Reading
     const current = new StationReading({
-      buoyStationId: '46253',
+      buoyStationId: `${stationId}`,
       buoyReading: new BuoyData({
         readingDate,
-        waveHeight,
+        significantWaveHeight,
         meanWaveDirection,
-        averagePeriod,
+        averageWavePeriod,
         dominantWavePeriod,
         waterTemperature,
+        swellHeight,
+        swellPeriod,
+        swellDirection,
+        windWaveHeight,
+        windWavePeriod,
+        windWaveDirection,
       }),
     });
-
-    console.log(current);
 
     await current.save();
   } catch (error) {
