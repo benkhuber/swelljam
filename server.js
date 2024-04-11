@@ -3,6 +3,8 @@ import Express from 'express';
 import axios from 'axios';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import mongoose from 'mongoose';
+// eslint-disable-next-line import/extensions
+import BuoyReadingClass from './src/classes/BuoyReadingClass.js';
 
 dotenv.config({ path: './.env' });
 
@@ -76,6 +78,10 @@ const fetchData = async (stationId) => {
     const windWaveHeight = currentSpectralReading[8];
     const windWavePeriod = currentSpectralReading[9];
     const windWaveDirection = currentSpectralReading[11];
+
+    const test = new BuoyReadingClass(currentReading, currentSpectralReading);
+
+    console.log(test);
 
     // New Station Reading
     const current = new StationReading({
