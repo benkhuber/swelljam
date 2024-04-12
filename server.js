@@ -74,6 +74,19 @@ app.get('/', (req, res) => {
 queryAllBuoys();
 setInterval(queryAllBuoys, 3600000);
 
+app.get('/api/buoydata/realtime/:stationId', async (req, res) => {
+  const { stationId } = req.params;
+  const BuoyData = mongoose.model('BuoyData', BuoyDataSchema, `${stationId}`);
+
+  try {
+    const items = BuoyData.find();
+    res.json(items);
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    res.status(500).send('Error fetching data');
+  }
+});
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

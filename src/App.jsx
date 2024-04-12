@@ -3,7 +3,7 @@ import React from 'react';
 import axios from 'axios';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Home from './pages/Home';
+import Home from './pages_2/Home';
 import AddSession from './pages/AddSession';
 import SpotForecast from './pages/SpotForecast';
 import Map from './pages/Map';
