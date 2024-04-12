@@ -4,7 +4,7 @@ import axios from 'axios';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import mongoose from 'mongoose';
 // eslint-disable-next-line import/extensions
-import BuoyReadingClass from './src/classes/BuoyReadingClass.js';
+import BuoyReading from './src/classes/BuoyReadingClass.js';
 
 dotenv.config({ path: './.env' });
 
@@ -22,28 +22,13 @@ db.once('open', () => {
 });
 
 const BuoyDataSchema = new mongoose.Schema({
-  readingDate: Date,
-  significantWaveHeight: Number,
-  meanWaveDirection: Number,
-  averageWavePeriod: Number,
-  dominantWavePeriod: Number,
-  waterTemperature: Number,
-  swellHeight: Number,
-  swellPeriod: Number,
-  swellDirection: String,
-  windWaveHeight: Number,
-  windWavePeriod: Number,
-  windWaveDirection: String,
-});
-
-const StationReadingSchema = new mongoose.Schema({
-  buoyStationId: String,
-  buoyReading: BuoyDataSchema,
+  reading: Date,
+  station: String,
+  buoyReading: Object,
 });
 
 const fetchData = async (stationId) => {
   try {
-    const StationReading = mongoose.model('StationReading', StationReadingSchema, `${stationId}`);
     const BuoyData = mongoose.model('BuoyData', BuoyDataSchema, `${stationId}`);
 
     // Parse Dominant Buoy Data
@@ -52,54 +37,20 @@ const fetchData = async (stationId) => {
     const lines = buoyResponse.data.toString().split('\n');
     const currentReading = lines[2].trim().split(/\s+/);
 
-    const year = currentReading[0];
-    const month = currentReading[1];
-    const day = currentReading[2];
-    const hour = currentReading[3];
-    const minute = currentReading[4];
-    const significantWaveHeight = currentReading[8];
-    const averageWavePeriod = currentReading[10];
-    const meanWaveDirection = currentReading[11];
-    const dominantWavePeriod = currentReading[9];
-    const waterTemperature = currentReading[14];
-
-    const utcDate = `${year}-${month}-${day}T${hour}:${minute}:00.000Z`;
-    const readingDate = new Date(utcDate);
-
     // Parse Spectral Buoy Data
     const detailedBuoyResponse = await axios.get(`https://www.ndbc.noaa.gov/data/realtime2/${stationId}.spec`);
 
     const spectralLines = detailedBuoyResponse.data.toString().split('\n');
     const currentSpectralReading = spectralLines[2].trim().split(/\s+/);
 
-    const swellHeight = currentSpectralReading[6];
-    const swellPeriod = currentSpectralReading[7];
-    const swellDirection = currentSpectralReading[10];
-    const windWaveHeight = currentSpectralReading[8];
-    const windWavePeriod = currentSpectralReading[9];
-    const windWaveDirection = currentSpectralReading[11];
-
-    const test = new BuoyReadingClass(currentReading, currentSpectralReading);
-
-    console.log(test);
+    // Combine buoy and spectral responses into one buoyObject
+    const buoyObject = new BuoyReading(stationId, currentReading, currentSpectralReading);
 
     // New Station Reading
-    const current = new StationReading({
-      buoyStationId: `${stationId}`,
-      buoyReading: new BuoyData({
-        readingDate,
-        significantWaveHeight,
-        meanWaveDirection,
-        averageWavePeriod,
-        dominantWavePeriod,
-        waterTemperature,
-        swellHeight,
-        swellPeriod,
-        swellDirection,
-        windWaveHeight,
-        windWavePeriod,
-        windWaveDirection,
-      }),
+    const current = new BuoyData({
+      reading: buoyObject.readingDate,
+      station: buoyObject.stationId,
+      buoyReading: buoyObject,
     });
 
     await current.save();

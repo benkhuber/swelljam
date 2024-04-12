@@ -1,5 +1,5 @@
-class BuoyReadingClass {
-  constructor(currentReading, currentSpectralReading) {
+class BuoyReading {
+  constructor(stationId, currentReading, currentSpectralReading) {
     const year = currentReading[0];
     const month = currentReading[1];
     const day = currentReading[2];
@@ -8,6 +8,7 @@ class BuoyReadingClass {
 
     const utcDate = `${year}-${month}-${day}T${hour}:${minute}:00.000Z`;
 
+    this.stationId = stationId;
     this.readingDate = new Date(utcDate);
     this.significantWaveHeight = currentReading[8];
     this.averageWavePeriod = currentReading[10];
@@ -24,4 +25,4 @@ class BuoyReadingClass {
   }
 }
 
-export default BuoyReadingClass;
+export default BuoyReading;
